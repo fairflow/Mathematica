@@ -1,0 +1,1911 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     61603,       1902]
+NotebookOptionsPosition[     55933,       1703]
+NotebookOutlinePosition[     56320,       1720]
+CellTagsIndexPosition[     56277,       1717]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Double-entry accounting", "Title"],
+
+Cell[CellGroupData[{
+
+Cell["To do", "Section"],
+
+Cell["Find all tags or notes to change stuff", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Initialisation", "Section",
+ CellChangeTimes->{{3.4752354906932907`*^9, 3.475235491603743*^9}, {
+  3.521183469305766*^9, 3.521183473776937*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Generally useful packages", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Units`\>\"", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.521181446019352*^9, 3.521181446929017*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Utility functions", "Subsubsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"makeConst", "[", "fn_", "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"fn", "[", "]"}], ":=", "fn"}], ";", 
+    RowBox[{"SetAttributes", "[", 
+     RowBox[{"fn", ",", "HoldAll"}], "]"}]}], ")"}]}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Monad comprehensions", "Subsection",
+ CellChangeTimes->{{3.546002584365099*^9, 3.54600258521732*^9}, 
+   3.546002917537384*^9}],
+
+Cell[TextData[{
+ "This is a useful experiment in extending the ",
+ StyleBox["Mathematica ",
+  FontSlant->"Italic"],
+ "programming language to use a programming style familiar from functional \
+languages such as ",
+ StyleBox["Haskell",
+  FontSlant->"Italic"],
+ " and ",
+ StyleBox["Clean",
+  FontSlant->"Italic"],
+ ". In this directory is a ",
+ ButtonBox["useful EDIT ME palette",
+  BaseStyle->"Hyperlink",
+  ButtonData->{"MonadConcurrencyPalette.nb", None}],
+ " for entering comprehension syntax."
+}], "Text"],
+
+Cell[CellGroupData[{
+
+Cell["Initialisation for Monads", "Subsubsection",
+ InitializationGroup->True],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Needs", "[", "\"\<Monads`\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Needs", "[", "\"\<Notation`\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Notation", "[", 
+   RowBox[{
+    TagBox[
+     RowBox[{"\[LeftBracketingBar]", "z___", "\[RightBracketingBar]"}],
+     "NotationTemplateTag",
+     BaseStyle->"NotationTemplateStyle"], " ", "\[DoubleLongLeftRightArrow]", 
+    " ", 
+    TagBox[
+     RowBox[{"comprehend", "[", 
+      RowBox[{"Sets", ",", "z___"}], "]"}],
+     "NotationTemplateTag",
+     BaseStyle->"NotationTemplateStyle"]}], "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"Notation", "[", 
+   RowBox[{
+    TagBox[
+     RowBox[{"\[LeftAngleBracket]", "z___", "\[RightAngleBracket]"}],
+     "NotationTemplateTag",
+     BaseStyle->"NotationTemplateStyle"], " ", "\[DoubleLongLeftRightArrow]", 
+    " ", 
+    TagBox[
+     RowBox[{"comprehend", "[", 
+      RowBox[{"List", ",", "z___"}], "]"}],
+     "NotationTemplateTag",
+     BaseStyle->"NotationTemplateStyle"]}], "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"Notation", "[", 
+   RowBox[{
+    TagBox[
+     RowBox[{"p_", "\[LeftTriangle]", "l_"}],
+     "NotationTemplateTag",
+     BaseStyle->"NotationTemplateStyle"], " ", "\[DoubleLongLeftRightArrow]", 
+    " ", 
+    TagBox[
+     RowBox[{"generator", "[", 
+      RowBox[{"p_", ",", "l_"}], "]"}],
+     "NotationTemplateTag",
+     BaseStyle->"NotationTemplateStyle"]}], "]"}], " ", ";"}], "\n", 
+ RowBox[{
+  RowBox[{"InfixNotation", "[", 
+   RowBox[{
+    TagBox["\[DoubleVerticalBar]",
+     "NotationTemplateTag"], ",", "zipgen"}], "]"}], ";"}]}], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Documentation for general monads", "Subsubsection"],
+
+Cell[TextData[{
+ "The idea of types is useful in explaining general monads, even in a setting \
+such as this where types are not explicit.  We can see already  in the \
+definition of ",
+ Cell[BoxData[
+  StyleBox["comprehend", "InlineInput"]], "Input"],
+ " that an element of typing is necessarily introduced with comprehensions \
+since ",
+ Cell[BoxData[
+  StyleBox["comprehend", "InlineInput"]], "Input"],
+ " requires the supply of a notion of computation as its first argument.  For \
+this presentation, it is enough to think of a type as a set of expressions of \
+some kind."
+}], "Text",
+ CellChangeTimes->{{3.5460026087277193`*^9, 3.546002610465622*^9}, {
+  3.546003188942327*^9, 3.5460031906075687`*^9}, {3.547105910344377*^9, 
+  3.5471059113420753`*^9}}],
+
+Cell[TextData[{
+ Cell[BoxData[
+  StyleBox["List", "InlineInput"]], "Input"],
+ " is a monad (with zero).  A monad ",
+ Cell[BoxData[
+  StyleBox["m", "InlineInput"]], "Input"],
+ " encapsulates a generalised ",
+ StyleBox["notion of computation",
+  FontSlant->"Italic"],
+ ". Given any type ",
+ Cell[BoxData["\[Alpha]"], "Input"],
+ ", the monad produces a type ",
+ Cell[BoxData[
+  StyleBox[
+   RowBox[{"m", "[", "\[Alpha]", "]"}], "InlineInput"]], "Input"],
+ ", to be seen as a type of ",
+ StyleBox["computations yielding values in ",
+  FontSlant->"Italic"],
+ Cell[BoxData[
+  StyleBox["\[Alpha]",
+   FontSlant->"Italic"]], "Input"],
+ ".  (At least) two functions are defined for any monad ",
+ Cell[BoxData[
+  StyleBox["m", "InlineInput"]], "Input"],
+ ", namely ",
+ Cell[BoxData[
+  StyleBox[
+   RowBox[{"unit", "[", "m", "]"}], "InlineInput"]], "Input"],
+ " and ",
+ Cell[BoxData[
+  StyleBox[
+   RowBox[{"bind", "[", "m", "]"}], "InlineInput"]], "Input"],
+ ".  ",
+ Cell[BoxData[
+  StyleBox[
+   RowBox[{"unit", "[", "m", "]"}], "InlineInput"]], "Input"],
+ " is a function ",
+ Cell[BoxData[
+  StyleBox[
+   RowBox[{"\[Alpha]", " ", "\[LongRightArrow]", " ", 
+    RowBox[{"m", "[", "\[Alpha]", "]"}]}], "InlineInput"]], "Input"],
+ " which, when given an value of type ",
+ Cell[BoxData["\[Alpha]"], "Input"],
+ ", returns a computation which immediately returns that value (",
+ Cell[BoxData[
+  StyleBox["unit", "InlineInput"]], "Input"],
+ " is often called ",
+ Cell[BoxData[
+  StyleBox["return", "InlineInput"]], "Input"],
+ ").  In the case of the ",
+ Cell[BoxData[
+  StyleBox["List", "InlineInput"]], "Input"],
+ " monad, ",
+ Cell[BoxData[
+  StyleBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"unit", "[", "List", "]"}], "[", "a", "]"}], "=", 
+    RowBox[{"{", "a", "}"}]}], "InlineInput"]], "Input"],
+ ".  ",
+ Cell[BoxData[
+  StyleBox[
+   RowBox[{"bind", "[", "m", "]"}], "InlineInput"]], "Input"],
+ " is a more complex function, which given a computation-generating function ",
+ Cell[BoxData[
+  StyleBox[
+   RowBox[{"f", " ", ":", " ", 
+    RowBox[{"\[Alpha]", " ", "\[LongRightArrow]", " ", 
+     RowBox[{"m", "[", "\[Beta]", "]"}]}]}], "InlineInput"]], "Input"],
+ " and a computation of type ",
+ Cell[BoxData[
+  StyleBox[
+   RowBox[{"m", "[", "\[Alpha]", "]"}], "InlineInput"]], "Input"],
+ ", produces a computation of type ",
+ Cell[BoxData[
+  StyleBox[
+   RowBox[{"m", "[", "\[Beta]", "]"}], "InlineInput"]], "Input"],
+ ".  Intuitively, ",
+ Cell[BoxData[
+  StyleBox[
+   RowBox[{
+    RowBox[{"bind", "[", "m", "]"}], "[", 
+    RowBox[{"f", ",", "c"}], "]"}], "InlineInput"]], "Input"],
+ " works as follows: execute the computation ",
+ Cell[BoxData[
+  StyleBox["c", "InlineInput"]], "Input"],
+ " over ",
+ Cell[BoxData["\[Alpha]"], "Input"],
+ ", giving a value ",
+ Cell[BoxData[
+  StyleBox["a", "InlineInput"]], "Input"],
+ " in ",
+ Cell[BoxData["\[Alpha]"], "Input"],
+ ".  Then apply the function ",
+ Cell[BoxData[
+  StyleBox["f", "InlineInput"]], "Input"],
+ "  to ",
+ Cell[BoxData[
+  StyleBox["a", "InlineInput"]], "Input"],
+ ", yielding a computation over ",
+ Cell[BoxData["\[Beta]"], "Input"],
+ ", which is then executed to give a value in ",
+ Cell[BoxData["\[Beta]"], "Input"],
+ ".  In the case of the ",
+ Cell[BoxData[
+  StyleBox["List", "InlineInput"]], "Input"],
+ " monad, the notion of computation is ",
+ StyleBox["non-determinism",
+  FontSlant->"Italic"],
+ ". Many (or no) values are returned in a list ",
+ Cell[BoxData[
+  StyleBox[
+   RowBox[{"{", "l___", "}"}], "InlineInput"]], "Input"],
+ ", rather than just one.  Thus ",
+ Cell[BoxData[
+  StyleBox[
+   RowBox[{
+    RowBox[{"bind", "[", "List", "]"}], "[", 
+    RowBox[{"f", ",", "c"}], "]"}], "InlineInput"]], "Input"],
+ " takes the elements of ",
+ Cell[BoxData[
+  StyleBox["c", "InlineInput"]], "Input"],
+ " and applies ",
+ Cell[BoxData[
+  StyleBox["f", "InlineInput"]], "Input"],
+ " to each one, yielding a list of lists.  The elements of those lists are \
+returned, that is, the list of lists is flattened at the outermost level."
+}], "Text",
+ CellChangeTimes->{{3.546002640051774*^9, 3.546002640071183*^9}}],
+
+Cell[TextData[{
+ "We may use these definitions to construct a monad comprehension syntax from \
+any monad; however in order to use tests we need a zero for the monad. Not \
+all monads have a zero but common ones such as ",
+ StyleBox["List", "Input"],
+ " do."
+}], "Text",
+ CellChangeTimes->{{3.546002640051774*^9, 3.5460026447746897`*^9}, {
+  3.547106241933319*^9, 3.547106262832902*^9}, {3.547184559489819*^9, 
+  3.547184560423821*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Definitions of monadic functions", "Subsubsection",
+ CellChangeTimes->{{3.546002973989172*^9, 3.5460029741869373`*^9}, {
+  3.546003006540436*^9, 3.546003007396016*^9}}],
+
+Cell[TextData[{
+ "The monadic functions for ",
+ Cell[BoxData[
+  StyleBox["List", "InlineInput"]], "Input"],
+ " are (thus) as follows:"
+}], "Text",
+ CellChangeTimes->{3.5460026604156933`*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"zero", "[", "List", "]"}], ":=", 
+  RowBox[{"{", "}"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"unit", "[", "List", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"{", "#", "}"}], "&"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"bind", "[", "List", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Flatten", "[", 
+    RowBox[{
+     RowBox[{"#1", " ", "/@", " ", "#2"}], ",", "1"}], "]"}], 
+   "&"}]}]}], "Input",
+ CellChangeTimes->{{3.546071869868903*^9, 3.5460718719023657`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"bind", "[", "List", "]"}], "[", 
+  RowBox[{"Range", ",", 
+   RowBox[{"{", 
+    RowBox[{"2", ",", "3", ",", "4"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{
+  3.546002679039317*^9, {3.546002725879683*^9, 3.546002727113071*^9}, 
+   3.5460027899007607`*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "1", ",", "2", ",", "1", ",", "2", ",", "3", ",", "1", ",", "2", ",", "3", 
+   ",", "4"}], "}"}]], "Output",
+ CellChangeTimes->{3.546002845044282*^9}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["The general definition of a monad comprehension", "Subsubsection",
+ CellChangeTimes->{{3.54600300186194*^9, 3.546003011019986*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+    "if", " ", "there", " ", "are", " ", "no", " ", "remaining", " ", 
+     "generators", " ", "or", " ", "conditions"}], ",", " ", 
+    RowBox[{"return", " ", "the", " ", "value", " ", "e", " ", "only"}]}], 
+   " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"comprehend", "[", 
+     RowBox[{"m_", ",", "e_", ",", "True"}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"unit", "[", "m", "]"}], "[", "e", "]"}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "process", " ", "the", " ", "last", " ", "generator", " ", "or", " ", 
+     "condition"}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"comprehend", "[", 
+     RowBox[{"m_", ",", "e_", ",", " ", "q_"}], "]"}], ":=", 
+    RowBox[{"comprehend", "[", 
+     RowBox[{"m", ",", "e", ",", "q", ",", "True"}], "]"}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+      "process", " ", "a", " ", "generator", " ", "with", " ", "pattern", " ",
+        "p", " ", "and", " ", "source", " ", "l"}], ";", " ", 
+      RowBox[{"if", " ", "pattern", " ", "match", " ", "fails"}]}], ",", " ", 
+     
+     RowBox[{"return", " ", "with", " ", "zero"}]}], " ", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"comprehend", "[", 
+     RowBox[{"m_", ",", "e_", ",", 
+      RowBox[{"p_", "\[LeftTriangle]", "l_"}], ",", "q__"}], "]"}], ":=", 
+    "\[IndentingNewLine]", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "ok", "}"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"ok", "[", "p", "]"}], ":=", 
+        RowBox[{"comprehend", "[", 
+         RowBox[{"m", ",", "e", ",", "q"}], "]"}]}], ";", 
+       RowBox[{
+        RowBox[{"ok", "[", "_", "]"}], ":=", 
+        RowBox[{"zero", "[", "m", "]"}]}], ";", 
+       RowBox[{
+        RowBox[{"bind", "[", "m", "]"}], "[", 
+        RowBox[{"ok", ",", "l"}], "]"}]}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{
+     "anything", " ", "not", " ", "a", " ", "generator", " ", "is", " ", "a", 
+      " ", "test"}], ";", " ", 
+     RowBox[{
+     "the", " ", "remaining", " ", "computation", " ", "is", " ", "discarded",
+       " ", "if", " ", "it", " ", "fails"}]}], " ", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"comprehend", "[", 
+     RowBox[{"m_", ",", "e_", ",", "b_", ",", "q__"}], "]"}], ":=", 
+    RowBox[{"If", "[", 
+     RowBox[{"b", ",", 
+      RowBox[{"comprehend", "[", 
+       RowBox[{"m", ",", "e", ",", "q"}], "]"}], ",", 
+      RowBox[{"zero", "[", "m", "]"}]}], "]"}]}]}]}]], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["The Set monad", "Subsubsection",
+ CellChangeTimes->{{3.5460040196686296`*^9, 3.546004022352826*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"pluck", "[", 
+   RowBox[{"e_", ",", "l_"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", "x", "}"}], ",", 
+    RowBox[{"\[LeftAngleBracket]", 
+     RowBox[{"x", ",", 
+      RowBox[{"x_", " ", "\[LeftTriangle]", " ", "l"}], ",", 
+      RowBox[{"x", "=!=", "e"}]}], "\[RightAngleBracket]"}]}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.546004030520919*^9, 3.5460040367814493`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"pluck", "[", 
+  RowBox[{"3", ",", 
+   RowBox[{"{", 
+    RowBox[{"3", ",", "3", ",", "4", ",", "5", ",", "6"}], "}"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.546005380319477*^9, 3.5460054098767977`*^9}, {
+  3.5460062845767717`*^9, 3.546006286200119*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"4", ",", "5", ",", "6"}], "}"}]], "Output",
+ CellChangeTimes->{3.54600541106098*^9, 3.546005651586411*^9, 
+  3.5460062876459627`*^9}]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"removeDups", "[", 
+   RowBox[{"{", "}"}], "]"}], ":=", 
+  RowBox[{"{", "}"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"removeDups", "[", 
+   RowBox[{"{", 
+    RowBox[{"h_", ",", "l___"}], "}"}], "]"}], ":=", 
+  RowBox[{"Prepend", "[", 
+   RowBox[{
+    RowBox[{"pluck", "[", 
+     RowBox[{"h", ",", 
+      RowBox[{"removeDups", "[", 
+       RowBox[{"{", "l", "}"}], "]"}]}], "]"}], ",", "h"}], "]"}]}]}], "Input",\
+
+ CellChangeTimes->{3.54600404175415*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"zero", "[", "Sets", "]"}], ":=", 
+  RowBox[{"{", "}"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"unit", "[", "Sets", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"{", "#", "}"}], "&"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"bind", "[", "Sets", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"removeDups", "[", 
+    RowBox[{"Flatten", "[", 
+     RowBox[{
+      RowBox[{"#1", " ", "/@", " ", "#2"}], ",", "1"}], "]"}], "]"}], 
+   "&"}]}]}], "Input",
+ CellChangeTimes->{{3.546004053721813*^9, 3.5460040543987513`*^9}, {
+  3.54600485886348*^9, 3.546004865261623*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"bind", "[", "Sets", "]"}], "[", 
+  RowBox[{"Range", ",", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{
+  3.546002679039317*^9, {3.546002725879683*^9, 3.546002727113071*^9}, 
+   3.5460027899007607`*^9, {3.546004722527937*^9, 3.546004722963286*^9}, 
+   3.546004756503255*^9, {3.5460062063887*^9, 3.546006208530548*^9}, {
+   3.5460062400937138`*^9, 3.546006242153459*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.546002845044282*^9, 3.5460047243459673`*^9, 3.546004758325717*^9, 
+   3.5460050559671373`*^9, 3.5460052794563*^9, {3.546006187981745*^9, 
+   3.5460062095988083`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Simple examples of the list monad", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Block", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"x", ",", "y"}], "}"}], ",", 
+   RowBox[{"\[LeftAngleBracket]", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       SuperscriptBox["x", "2"], ",", 
+       SqrtBox["y"]}], "}"}], ",", 
+     RowBox[{"x_", " ", "\[LeftTriangle]", " ", 
+      RowBox[{"Range", "[", "3", "]"}]}], ",", 
+     RowBox[{"y_", "\[LeftTriangle]", 
+      RowBox[{"Range", "[", 
+       RowBox[{"2", ",", "5"}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{"x", " ", "y"}], " ", ">", " ", "4"}], ",", 
+     RowBox[{
+      RowBox[{"x", "+", "y"}], "=!=", "6"}]}], "\[RightAngleBracket]"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.5460719785313807`*^9, 3.546071995679267*^9}, {
+  3.5471063213758*^9, 3.547106327473981*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"4", ",", 
+     SqrtBox["3"]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"4", ",", 
+     SqrtBox["5"]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"9", ",", 
+     SqrtBox["2"]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"9", ",", "2"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"9", ",", 
+     SqrtBox["5"]}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.545995967667439*^9, 3.5460043634607153`*^9, 
+  3.546004487863296*^9, 3.546004784443838*^9, 3.546005276254693*^9, 
+  3.5460055166717*^9, 3.546005640295621*^9, 3.546005945475567*^9, 
+  3.546071934763319*^9, 3.546072000546831*^9, 3.54710633265228*^9}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Matrix multiplication", "Subsubsection",
+ CellChangeTimes->{{3.547108759916071*^9, 3.5471087672180853`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"myMatMult", "[", 
+   RowBox[{"nn_", ",", "mm_"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"r", ",", "c"}], "}"}], ",", 
+    RowBox[{"\[LeftAngleBracket]", 
+     RowBox[{
+      RowBox[{"\[LeftAngleBracket]", 
+       RowBox[{
+        RowBox[{"r", ".", "c"}], ",", 
+        RowBox[{"c_", " ", "\[LeftTriangle]", " ", 
+         RowBox[{"Transpose", "@", "nn"}]}]}], "\[RightAngleBracket]"}], ",", 
+      
+      RowBox[{"r_", " ", "\[LeftTriangle]", " ", "mm"}]}], 
+     "\[RightAngleBracket]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"myMatMult", "[", 
+    RowBox[{
+     RowBox[{"RotationMatrix", "[", "\[Theta]", "]"}], ",", 
+     RowBox[{"RotationMatrix", "[", "\[Phi]", "]"}]}], "]"}], "//", 
+   "Simplify"}], "//", "MatrixForm"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"RotationMatrix", "[", "\[Theta]", "]"}], ".", 
+    RowBox[{"RotationMatrix", "[", "\[Phi]", "]"}]}], "//", "Simplify"}], "//",
+   "MatrixForm"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.5471087708224583`*^9, 3.547108859420183*^9}, {
+  3.547108916469887*^9, 3.547108930468616*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      RowBox[{"Cos", "[", 
+       RowBox[{"\[Theta]", "+", "\[Phi]"}], "]"}], 
+      RowBox[{"-", 
+       RowBox[{"Sin", "[", 
+        RowBox[{"\[Theta]", "+", "\[Phi]"}], "]"}]}]},
+     {
+      RowBox[{"Sin", "[", 
+       RowBox[{"\[Theta]", "+", "\[Phi]"}], "]"}], 
+      RowBox[{"Cos", "[", 
+       RowBox[{"\[Theta]", "+", "\[Phi]"}], "]"}]}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      RowBox[{"Cos", "[", 
+       RowBox[{"\[Theta]", "+", "\[Phi]"}], "]"}], 
+      RowBox[{"-", 
+       RowBox[{"Sin", "[", 
+        RowBox[{"\[Theta]", "+", "\[Phi]"}], "]"}]}]},
+     {
+      RowBox[{"Sin", "[", 
+       RowBox[{"\[Theta]", "+", "\[Phi]"}], "]"}], 
+      RowBox[{"Cos", "[", 
+       RowBox[{"\[Theta]", "+", "\[Phi]"}], "]"}]}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Application to finite functions and relations", "Subsubsection"],
+
+Cell[TextData[{
+ "We can work with finite functions and relations by representing these as \
+lists or, more properly, sets.  Now we can view a relation as a function in \
+two complementary ways.  If ",
+ Cell[BoxData[
+  FormBox["r", TraditionalForm]]],
+ " is a relation we usually think of ",
+ Cell[BoxData[
+  FormBox["r", TraditionalForm]]],
+ " as a list of pairs, for example "
+}], "Text",
+ CellChangeTimes->{{3.545996988903651*^9, 3.545996994345373*^9}, {
+  3.547184832543467*^9, 3.547184833571507*^9}, {3.547184877175603*^9, 
+  3.547184911585235*^9}, {3.54718495964034*^9, 3.547184961407888*^9}, {
+  3.547198250219421*^9, 3.5471982534807653`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"r", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"a", ",", "d"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"a", ",", "e"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"b", ",", "d"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"b", ",", "f"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"c", ",", "f"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"b", ",", "d"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"e", ",", "f"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"f", ",", "c"}], "}"}]}], "}"}]}], ";"}]], "Input",
+ InitializationGroup->True,
+ CellChangeTimes->{{3.5472020004880342`*^9, 3.547202016838191*^9}}],
+
+Cell[TextData[{
+ "It is more convenient to use a more suggestive notation (see ",
+ ButtonBox["Z",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["http://en.wikipedia.org/wiki/Z_specification_language"], None},
+  ButtonNote->"http://en.wikipedia.org/wiki/Z_specification_language"],
+ ", for example) using the maplet ",
+ Cell[BoxData[
+  RowBox[{"a", "\[RightTeeArrow]", "d"}]], "Input"],
+ " instead of ",
+ Cell[BoxData[
+  RowBox[{"{", 
+   RowBox[{"a", ",", "d"}], "}"}]], "Input"],
+ ":"
+}], "Text",
+ CellChangeTimes->{{3.54600458384531*^9, 3.546004593755364*^9}, {
+  3.5471987725902967`*^9, 3.547198773128394*^9}, {3.547199458031476*^9, 
+  3.547199458089672*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"r", "=", 
+  RowBox[{"r", "/.", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"x_", ",", "y_"}], "}"}], "\[Rule]", 
+    RowBox[{"(", 
+     RowBox[{"x", "\[RightTeeArrow]", "y"}], ")"}]}]}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"a", "\[RightTeeArrow]", "d"}], ",", 
+   RowBox[{"a", "\[RightTeeArrow]", "e"}], ",", 
+   RowBox[{"b", "\[RightTeeArrow]", "d"}], ",", 
+   RowBox[{"b", "\[RightTeeArrow]", "f"}], ",", 
+   RowBox[{"c", "\[RightTeeArrow]", "f"}], ",", 
+   RowBox[{"b", "\[RightTeeArrow]", "d"}], ",", 
+   RowBox[{"e", "\[RightTeeArrow]", "f"}], ",", 
+   RowBox[{"f", "\[RightTeeArrow]", "c"}]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[TextData[{
+ "We need to have control over the elements of ",
+ Cell[BoxData[
+  FormBox["r", TraditionalForm]]],
+ " and so we define the domain and codomain of r using set comprehensions:"
+}], "Text",
+ CellChangeTimes->{{3.545996797737207*^9, 3.545996799647985*^9}, {
+  3.5460045733581247`*^9, 3.546004573369988*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"dom", "[", "r_", "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", "x", "}"}], ",", 
+    RowBox[{"\[LeftBracketingBar]", 
+     RowBox[{"x", ",", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"x_", "\[RightTeeArrow]", "_"}], ")"}], "\[LeftTriangle]", 
+       "r"}]}], "\[RightBracketingBar]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ran", "[", "r_", "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", "y", "}"}], ",", 
+    RowBox[{"\[LeftBracketingBar]", 
+     RowBox[{"y", ",", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"_", "\[RightTeeArrow]", "y_"}], ")"}], "\[LeftTriangle]", 
+       "r"}]}], "\[RightBracketingBar]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"hereAre", "[", 
+  RowBox[{
+   RowBox[{"dom", "[", "r", "]"}], ",", 
+   RowBox[{"ran", "[", "r", "]"}]}], "]"}]}], "Input",
+ InitializationGroup->True,
+ CellChangeTimes->{{3.545996020130444*^9, 3.545996027204352*^9}, {
+   3.545996078155476*^9, 3.545996085728765*^9}, {3.547198316638857*^9, 
+   3.547198332098278*^9}, 3.547198364911385*^9, {3.547200921703107*^9, 
+   3.5472009242976723`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"hereAre", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"a", ",", "b", ",", "c", ",", "e", ",", "f"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"d", ",", "e", ",", "f", ",", "c"}], "}"}]}], "]"}]], "Output"]
+}, Open  ]],
+
+Cell[TextData[{
+ "Then ",
+ Cell[BoxData[
+  FormBox["r", TraditionalForm]]],
+ " can be turned into a function in one direction by listing all elements \
+paired with ",
+ Cell[BoxData[
+  FormBox["a", TraditionalForm]]],
+ ", all paired with ",
+ Cell[BoxData[
+  FormBox["b", TraditionalForm]]],
+ " and all paired with ",
+ Cell[BoxData[
+  FormBox["c", TraditionalForm]]],
+ ":"
+}], "Text",
+ CellChangeTimes->{{3.545997010133998*^9, 3.545997022650279*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"leftFunction", "[", "r_", "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"x", ",", "y"}], "}"}], ",", 
+    RowBox[{"\[LeftAngleBracket]", 
+     RowBox[{
+      RowBox[{"x", "\[RightTeeArrow]", 
+       RowBox[{"\[LeftAngleBracket]", 
+        RowBox[{"y", ",", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"x", "\[RightTeeArrow]", "y_"}], ")"}], " ", 
+          "\[LeftTriangle]", " ", "r"}]}], "\[RightAngleBracket]"}]}], ",", 
+      RowBox[{"x_", " ", "\[LeftTriangle]", " ", 
+       RowBox[{"dom", "[", "r", "]"}]}]}], "\[RightAngleBracket]"}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"leftFunction", "[", "r", "]"}]}], "Input",
+ InitializationGroup->True,
+ CellChangeTimes->{{3.545996117577985*^9, 3.545996126877926*^9}, 
+   3.5472009116326942`*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"a", "\[RightTeeArrow]", 
+    RowBox[{"{", 
+     RowBox[{"d", ",", "e"}], "}"}]}], ",", 
+   RowBox[{"b", "\[RightTeeArrow]", 
+    RowBox[{"{", 
+     RowBox[{"d", ",", "f", ",", "d"}], "}"}]}], ",", 
+   RowBox[{"c", "\[RightTeeArrow]", 
+    RowBox[{"{", "f", "}"}]}], ",", 
+   RowBox[{"e", "\[RightTeeArrow]", 
+    RowBox[{"{", "f", "}"}]}], ",", 
+   RowBox[{"f", "\[RightTeeArrow]", 
+    RowBox[{"{", "c", "}"}]}]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox["r", TraditionalForm]]],
+ " can also be turned into a function in the other direction by listing all \
+elements paired with ",
+ Cell[BoxData[
+  FormBox["d", TraditionalForm]]],
+ ", all paired with ",
+ Cell[BoxData[
+  FormBox["e", TraditionalForm]]],
+ " and all paired with ",
+ Cell[BoxData[
+  FormBox["f", TraditionalForm]]],
+ ":"
+}], "Text",
+ CellChangeTimes->{{3.545997029699584*^9, 3.5459970605834312`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"rightFunction", "[", "r_", "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"y", ",", "x"}], "}"}], ",", 
+    RowBox[{"\[LeftAngleBracket]", 
+     RowBox[{
+      RowBox[{"y", "\[RightTeeArrow]", 
+       RowBox[{"\[LeftAngleBracket]", 
+        RowBox[{"x", ",", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"x_", "\[RightTeeArrow]", "y"}], ")"}], " ", 
+          "\[LeftTriangle]", " ", "r"}]}], "\[RightAngleBracket]"}]}], ",", 
+      RowBox[{"y_", " ", "\[LeftTriangle]", " ", 
+       RowBox[{"ran", "[", "r", "]"}]}]}], "\[RightAngleBracket]"}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"rightFunction", "[", "r", "]"}]}], "Input",
+ InitializationGroup->True,
+ CellChangeTimes->{{3.545996135229999*^9, 3.545996141816947*^9}, 
+   3.545996842400826*^9, 3.547200915198956*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"d", "\[RightTeeArrow]", 
+    RowBox[{"{", 
+     RowBox[{"a", ",", "b", ",", "b"}], "}"}]}], ",", 
+   RowBox[{"e", "\[RightTeeArrow]", 
+    RowBox[{"{", "a", "}"}]}], ",", 
+   RowBox[{"f", "\[RightTeeArrow]", 
+    RowBox[{"{", 
+     RowBox[{"b", ",", "c", ",", "e"}], "}"}]}], ",", 
+   RowBox[{"c", "\[RightTeeArrow]", 
+    RowBox[{"{", "f", "}"}]}]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[TextData[{
+ "Only one of these definitions is necessary if we define the converse \
+(relational inverse) to ",
+ Cell[BoxData[
+  FormBox["r", TraditionalForm]]],
+ " in a standard way:"
+}], "Text",
+ CellChangeTimes->{{3.545997068678679*^9, 3.545997068686592*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"converse", "[", "r_", "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"y", ",", "x"}], "}"}], ",", 
+    RowBox[{"\[LeftAngleBracket]", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"y", "\[RightTeeArrow]", "x"}], ")"}], ",", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"x_", "\[RightTeeArrow]", "y_"}], ")"}], " ", 
+       "\[LeftTriangle]", " ", "r"}]}], "\[RightAngleBracket]"}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"hereAre", "[", 
+  RowBox[{"r", ",", 
+   RowBox[{"converse", "[", "r", "]"}]}], "]"}]}], "Input",
+ InitializationGroup->True,
+ CellChangeTimes->{{3.545996441052804*^9, 3.545996451951235*^9}, 
+   3.547200918423114*^9}],
+
+Cell[BoxData[
+ RowBox[{"hereAre", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"a", "\[RightTeeArrow]", "d"}], ",", 
+     RowBox[{"a", "\[RightTeeArrow]", "e"}], ",", 
+     RowBox[{"b", "\[RightTeeArrow]", "d"}], ",", 
+     RowBox[{"b", "\[RightTeeArrow]", "f"}], ",", 
+     RowBox[{"c", "\[RightTeeArrow]", "f"}], ",", 
+     RowBox[{"b", "\[RightTeeArrow]", "d"}], ",", 
+     RowBox[{"e", "\[RightTeeArrow]", "f"}], ",", 
+     RowBox[{"f", "\[RightTeeArrow]", "c"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"d", "\[RightTeeArrow]", "a"}], ",", 
+     RowBox[{"e", "\[RightTeeArrow]", "a"}], ",", 
+     RowBox[{"d", "\[RightTeeArrow]", "b"}], ",", 
+     RowBox[{"f", "\[RightTeeArrow]", "b"}], ",", 
+     RowBox[{"f", "\[RightTeeArrow]", "c"}], ",", 
+     RowBox[{"d", "\[RightTeeArrow]", "b"}], ",", 
+     RowBox[{"f", "\[RightTeeArrow]", "e"}], ",", 
+     RowBox[{"c", "\[RightTeeArrow]", "f"}]}], "}"}]}], "]"}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"rightFunction", "[", "r", "]"}], "\[Equal]", 
+  RowBox[{"leftFunction", "[", 
+   RowBox[{"converse", "[", "r", "]"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"rightFunction", "[", 
+   RowBox[{"converse", "[", "r", "]"}], "]"}], "\[Equal]", 
+  RowBox[{"leftFunction", "[", "r", "]"}]}]}], "Input"],
+
+Cell[BoxData["True"], "Output"],
+
+Cell[BoxData["True"], "Output"]
+}, Open  ]],
+
+Cell[TextData[{
+ "To turn a function into a relation given a (finite!) subset ",
+ StyleBox["d",
+  FontSlant->"Italic"],
+ " of its domain, all that is needed is to create a maplet for each element \
+of ",
+ StyleBox["d",
+  FontSlant->"Italic"],
+ ":"
+}], "Text",
+ CellChangeTimes->{{3.5471986443156023`*^9, 3.547198810414958*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"makeRel", "[", 
+   RowBox[{"f_", ",", "d_"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", "a", "}"}], ",", 
+    RowBox[{"\[LeftBracketingBar]", 
+     RowBox[{
+      RowBox[{"a", "\[RightTeeArrow]", 
+       RowBox[{"f", "[", "a", "]"}]}], ",", 
+      RowBox[{"a_", "\[LeftTriangle]", "d"}]}], "\[RightBracketingBar]"}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"squares", "=", 
+  RowBox[{"makeRel", "[", 
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["#", "2"], "&"}], ",", 
+    RowBox[{"Range", "[", 
+     RowBox[{"3", ",", "7"}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"add3", "=", 
+  RowBox[{"makeRel", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"#", "+", "3"}], "&"}], ",", 
+    RowBox[{"Range", "[", 
+     RowBox[{"4", ",", "40"}], "]"}]}], "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.547198625706381*^9, 3.5471986356432533`*^9}, {
+   3.547198824828211*^9, 3.547198884904974*^9}, {3.547198917760399*^9, 
+   3.547198945241597*^9}, 3.547199005388955*^9, {3.5471990562910767`*^9, 
+   3.547199098143162*^9}, {3.547199267643484*^9, 3.547199267767744*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"3", "\[RightTeeArrow]", "9"}], ",", 
+   RowBox[{"4", "\[RightTeeArrow]", "16"}], ",", 
+   RowBox[{"5", "\[RightTeeArrow]", "25"}], ",", 
+   RowBox[{"6", "\[RightTeeArrow]", "36"}], ",", 
+   RowBox[{"7", "\[RightTeeArrow]", "49"}]}], "}"}]], "Output"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"4", "\[RightTeeArrow]", "7"}], ",", 
+   RowBox[{"5", "\[RightTeeArrow]", "8"}], ",", 
+   RowBox[{"6", "\[RightTeeArrow]", "9"}], ",", 
+   RowBox[{"7", "\[RightTeeArrow]", "10"}], ",", 
+   RowBox[{"8", "\[RightTeeArrow]", "11"}], ",", 
+   RowBox[{"9", "\[RightTeeArrow]", "12"}], ",", 
+   RowBox[{"10", "\[RightTeeArrow]", "13"}], ",", 
+   RowBox[{"11", "\[RightTeeArrow]", "14"}], ",", 
+   RowBox[{"12", "\[RightTeeArrow]", "15"}], ",", 
+   RowBox[{"13", "\[RightTeeArrow]", "16"}], ",", 
+   RowBox[{"14", "\[RightTeeArrow]", "17"}], ",", 
+   RowBox[{"15", "\[RightTeeArrow]", "18"}], ",", 
+   RowBox[{"16", "\[RightTeeArrow]", "19"}], ",", 
+   RowBox[{"17", "\[RightTeeArrow]", "20"}], ",", 
+   RowBox[{"18", "\[RightTeeArrow]", "21"}], ",", 
+   RowBox[{"19", "\[RightTeeArrow]", "22"}], ",", 
+   RowBox[{"20", "\[RightTeeArrow]", "23"}], ",", 
+   RowBox[{"21", "\[RightTeeArrow]", "24"}], ",", 
+   RowBox[{"22", "\[RightTeeArrow]", "25"}], ",", 
+   RowBox[{"23", "\[RightTeeArrow]", "26"}], ",", 
+   RowBox[{"24", "\[RightTeeArrow]", "27"}], ",", 
+   RowBox[{"25", "\[RightTeeArrow]", "28"}], ",", 
+   RowBox[{"26", "\[RightTeeArrow]", "29"}], ",", 
+   RowBox[{"27", "\[RightTeeArrow]", "30"}], ",", 
+   RowBox[{"28", "\[RightTeeArrow]", "31"}], ",", 
+   RowBox[{"29", "\[RightTeeArrow]", "32"}], ",", 
+   RowBox[{"30", "\[RightTeeArrow]", "33"}], ",", 
+   RowBox[{"31", "\[RightTeeArrow]", "34"}], ",", 
+   RowBox[{"32", "\[RightTeeArrow]", "35"}], ",", 
+   RowBox[{"33", "\[RightTeeArrow]", "36"}], ",", 
+   RowBox[{"34", "\[RightTeeArrow]", "37"}], ",", 
+   RowBox[{"35", "\[RightTeeArrow]", "38"}], ",", 
+   RowBox[{"36", "\[RightTeeArrow]", "39"}], ",", 
+   RowBox[{"37", "\[RightTeeArrow]", "40"}], ",", 
+   RowBox[{"38", "\[RightTeeArrow]", "41"}], ",", 
+   RowBox[{"39", "\[RightTeeArrow]", "42"}], ",", 
+   RowBox[{"40", "\[RightTeeArrow]", "43"}]}], "}"}]], "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Direct (Cartesian) product of relations", "Subsubsection",
+ CellChangeTimes->{{3.547206619209326*^9, 3.547206624530888*^9}, {
+  3.5472070831828117`*^9, 3.5472070895028973`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"prod", "[", 
+   RowBox[{"r_", ",", "s_"}], "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"ra", ",", "rb", ",", "sa", ",", "sb"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\[LeftBracketingBar]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"ra", ",", "sa"}], "}"}], "\[RightTeeArrow]", 
+       RowBox[{"{", 
+        RowBox[{"rb", ",", "sb"}], "}"}]}], ",", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"ra_", "\[RightTeeArrow]", "rb_"}], ")"}], "\[LeftTriangle]", 
+       "r"}], ",", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"sa_", "\[RightTeeArrow]", "sb_"}], ")"}], "\[LeftTriangle]", 
+       "s"}]}], "\[RightBracketingBar]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"prod", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"a", "\[RightTeeArrow]", "d"}], ",", 
+     RowBox[{"b", "\[RightTeeArrow]", "d"}]}], "}"}], ",", "squares"}], 
+  "]"}]}], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", "3"}], "}"}], "\[RightTeeArrow]", 
+    RowBox[{"{", 
+     RowBox[{"d", ",", "9"}], "}"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", "4"}], "}"}], "\[RightTeeArrow]", 
+    RowBox[{"{", 
+     RowBox[{"d", ",", "16"}], "}"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", "5"}], "}"}], "\[RightTeeArrow]", 
+    RowBox[{"{", 
+     RowBox[{"d", ",", "25"}], "}"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", "6"}], "}"}], "\[RightTeeArrow]", 
+    RowBox[{"{", 
+     RowBox[{"d", ",", "36"}], "}"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"a", ",", "7"}], "}"}], "\[RightTeeArrow]", 
+    RowBox[{"{", 
+     RowBox[{"d", ",", "49"}], "}"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"b", ",", "3"}], "}"}], "\[RightTeeArrow]", 
+    RowBox[{"{", 
+     RowBox[{"d", ",", "9"}], "}"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"b", ",", "4"}], "}"}], "\[RightTeeArrow]", 
+    RowBox[{"{", 
+     RowBox[{"d", ",", "16"}], "}"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"b", ",", "5"}], "}"}], "\[RightTeeArrow]", 
+    RowBox[{"{", 
+     RowBox[{"d", ",", "25"}], "}"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"b", ",", "6"}], "}"}], "\[RightTeeArrow]", 
+    RowBox[{"{", 
+     RowBox[{"d", ",", "36"}], "}"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"b", ",", "7"}], "}"}], "\[RightTeeArrow]", 
+    RowBox[{"{", 
+     RowBox[{"d", ",", "49"}], "}"}]}]}], "}"}]], "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Observations on leftFunction and rightFunction", "Subsubsection",
+ CellChangeTimes->{{3.5459971538226233`*^9, 3.5459971790444937`*^9}, {
+  3.5471086474586697`*^9, 3.547108657231258*^9}}],
+
+Cell[TextData[{
+ "The left and right function converters have pseudo inverses which act as an \
+inverse on anything of the form ",
+ StyleBox["leftFunction[r]", "Input"],
+ " or ",
+ StyleBox["rightFunction[r]", "Input"],
+ " respectively.  The function converters preserve information about the \
+order in which the domain and range elements ",
+ StyleBox["first",
+  FontSlant->"Italic"],
+ " appear but inevitably group the remainder together."
+}], "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"leftFunctionInv", "[", "f_", "]"}], ":=", 
+   RowBox[{"Block", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"x", ",", "y"}], "}"}], ",", 
+     RowBox[{"\[LeftAngleBracket]", 
+      RowBox[{
+       RowBox[{"x", "\[RightTeeArrow]", "y"}], ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"x_", "\[RightTeeArrow]", "l_"}], ")"}], " ", 
+        "\[LeftTriangle]", " ", "f"}], ",", 
+       RowBox[{"y_", "\[LeftTriangle]", "l"}]}], "\[RightAngleBracket]"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"rightFunctionInv", "[", "f_", "]"}], ":=", 
+   RowBox[{"Block", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"y", ",", "x"}], "}"}], ",", 
+     RowBox[{"\[LeftAngleBracket]", 
+      RowBox[{
+       RowBox[{"y", "\[RightTeeArrow]", "x"}], ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"x_", "\[RightTeeArrow]", "l_"}], ")"}], " ", 
+        "\[LeftTriangle]", " ", "f"}], ",", 
+       RowBox[{"y_", "\[LeftTriangle]", "l"}]}], "\[RightAngleBracket]"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"r", "\[Equal]", 
+  RowBox[{"leftFunctionInv", "[", 
+   RowBox[{"leftFunction", "[", "r", "]"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"r", "\[Equal]", 
+  RowBox[{"rightFunctionInv", "[", 
+   RowBox[{"rightFunction", "[", "r", "]"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"rightFunctionInv", "[", 
+   RowBox[{"rightFunction", "[", "r", "]"}], "]"}], "\[Equal]", 
+  RowBox[{"rightFunctionInv", "[", 
+   RowBox[{"rightFunction", "[", 
+    RowBox[{"rightFunctionInv", "[", 
+     RowBox[{"rightFunction", "[", "r", "]"}], "]"}], "]"}], 
+   "]"}]}]}], "Input",
+ CellChangeTimes->{{3.545996528960141*^9, 3.545996545861607*^9}, 
+   3.5459969422387123`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"a", "\[RightTeeArrow]", "d"}], ",", 
+    RowBox[{"a", "\[RightTeeArrow]", "e"}], ",", 
+    RowBox[{"b", "\[RightTeeArrow]", "d"}], ",", 
+    RowBox[{"b", "\[RightTeeArrow]", "f"}], ",", 
+    RowBox[{"c", "\[RightTeeArrow]", "f"}], ",", 
+    RowBox[{"b", "\[RightTeeArrow]", "d"}], ",", 
+    RowBox[{"e", "\[RightTeeArrow]", "f"}], ",", 
+    RowBox[{"f", "\[RightTeeArrow]", "c"}]}], "}"}], "\[Equal]", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"a", "\[RightTeeArrow]", "d"}], ",", 
+    RowBox[{"a", "\[RightTeeArrow]", "e"}], ",", 
+    RowBox[{"b", "\[RightTeeArrow]", "d"}], ",", 
+    RowBox[{"b", "\[RightTeeArrow]", "f"}], ",", 
+    RowBox[{"b", "\[RightTeeArrow]", "d"}], ",", 
+    RowBox[{"c", "\[RightTeeArrow]", "f"}], ",", 
+    RowBox[{"e", "\[RightTeeArrow]", "f"}], ",", 
+    RowBox[{"f", "\[RightTeeArrow]", "c"}]}], "}"}]}]], "Output",
+ CellChangeTimes->{3.5459965545388193`*^9, 3.546006424822442*^9, 
+  3.5472037519302197`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"a", "\[RightTeeArrow]", "d"}], ",", 
+    RowBox[{"a", "\[RightTeeArrow]", "e"}], ",", 
+    RowBox[{"b", "\[RightTeeArrow]", "d"}], ",", 
+    RowBox[{"b", "\[RightTeeArrow]", "f"}], ",", 
+    RowBox[{"c", "\[RightTeeArrow]", "f"}], ",", 
+    RowBox[{"b", "\[RightTeeArrow]", "d"}], ",", 
+    RowBox[{"e", "\[RightTeeArrow]", "f"}], ",", 
+    RowBox[{"f", "\[RightTeeArrow]", "c"}]}], "}"}], "\[Equal]", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"a", "\[RightTeeArrow]", "d"}], ",", 
+    RowBox[{"b", "\[RightTeeArrow]", "d"}], ",", 
+    RowBox[{"b", "\[RightTeeArrow]", "d"}], ",", 
+    RowBox[{"a", "\[RightTeeArrow]", "e"}], ",", 
+    RowBox[{"b", "\[RightTeeArrow]", "f"}], ",", 
+    RowBox[{"c", "\[RightTeeArrow]", "f"}], ",", 
+    RowBox[{"e", "\[RightTeeArrow]", "f"}], ",", 
+    RowBox[{"f", "\[RightTeeArrow]", "c"}]}], "}"}]}]], "Output",
+ CellChangeTimes->{3.5459965545388193`*^9, 3.546006424822442*^9, 
+  3.547203751934678*^9}],
+
+Cell[BoxData["True"], "Output",
+ CellChangeTimes->{3.5459965545388193`*^9, 3.546006424822442*^9, 
+  3.547203751937695*^9}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Further tests", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[LeftBracketingBar]", 
+  RowBox[{"x", ",", 
+   RowBox[{"x_", "\[LeftTriangle]", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", "2", ",", "3", ",", "2", ",", "5"}], "}"}]}], ",", 
+   RowBox[{"x", ">", "1"}]}], "\[RightBracketingBar]"}]], "Input",
+ CellChangeTimes->{{3.475233649208026*^9, 3.47523365989262*^9}, {
+  3.475233691172131*^9, 3.4752336919636097`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"2", ",", "3", ",", "5"}], "}"}]], "Output",
+ CellChangeTimes->{3.475233661216033*^9, 3.475233693687128*^9, 
+  3.5211843087332087`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[LeftAngleBracket]", 
+  RowBox[{"x", ",", 
+   RowBox[{"x_", " ", "\[LeftTriangle]", " ", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", "2", ",", "3", ",", "2", ",", "5"}], "}"}]}], ",", 
+   RowBox[{"x", ">", "1"}]}], "\[RightAngleBracket]"}]], "Input",
+ CellChangeTimes->{{3.475233674391137*^9, 3.4752336868918667`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"2", ",", "3", ",", "2", ",", "5"}], "}"}]], "Output",
+ CellChangeTimes->{3.475233696282754*^9, 3.521184312102778*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[LeftAngleBracket]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"2", " ", "l"}], "+", "1"}], ",", 
+   RowBox[{"l_", " ", "\[LeftTriangle]", " ", 
+    RowBox[{"{", 
+     RowBox[{
+     "1", ",", "3", ",", "4", ",", "5", ",", "9", ",", "11", ",", "23", ",", 
+      "29", ",", "36"}], "}"}]}], ",", 
+   RowBox[{"l", "\[NotEqual]", "5"}], ",", 
+   RowBox[{"Not", "[", 
+    RowBox[{"EvenQ", "[", "l", "]"}], "]"}]}], 
+  "\[RightAngleBracket]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"3", ",", "7", ",", "19", ",", "23", ",", "47", ",", "59"}], 
+  "}"}]], "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Palette for monad comprehensions", "Subsubsection"],
+
+Cell[BoxData[GridBox[{
+   {
+    ButtonBox[
+     RowBox[{"\[LeftAngleBracket]", 
+      RowBox[{"\[SelectionPlaceholder]", ",", 
+       RowBox[{
+       "\[Placeholder]", " ", "\[LeftTriangle]", " ", "\[Placeholder]"}]}], 
+      "\[RightAngleBracket]"}]], 
+    ButtonBox[
+     RowBox[{
+     "\[SelectionPlaceholder]", "\[LeftTriangle]", "\[Placeholder]"}]], 
+    ButtonBox["\[LeftAngleBracket]"], 
+    ButtonBox["\[RightAngleBracket]"], 
+    RowBox[{
+     ButtonBox["\[LeftTriangle]"], 
+     ButtonBox["\[DoubleVerticalBar]"]}]},
+   {
+    ButtonBox[
+     RowBox[{"\[SelectionPlaceholder]", "\[Union]", "\[Placeholder]"}]], 
+    ButtonBox[
+     RowBox[{
+     "\[SelectionPlaceholder]", "\[Intersection]", "\[Placeholder]"}]], 
+    ButtonBox["\[And]"], 
+    ButtonBox["\[Or]"], 
+    ButtonBox["\[Not]"]},
+   {
+    ButtonBox[
+     RowBox[{"\[LeftBracketingBar]", 
+      RowBox[{"\[SelectionPlaceholder]", ",", 
+       RowBox[{"\[Placeholder]", "\[LeftTriangle]", "\[Placeholder]"}]}], 
+      "\[RightBracketingBar]"}]], 
+    ButtonBox[
+     RowBox[{"{", "\[SelectionPlaceholder]", "}"}]], 
+    ButtonBox["\[LeftBracketingBar]"], 
+    ButtonBox["\[RightBracketingBar]"], 
+    ButtonBox[""]}
+  },
+  GridBoxDividers->{
+   "Columns" -> {True, {False}, True}, "ColumnsIndexed" -> {}, 
+    "Rows" -> {{True}}, "RowsIndexed" -> {}},
+  GridBoxSpacings->{"Columns" -> {
+      Offset[0.27999999999999997`], {
+       Offset[0.]}, 
+      Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+      Offset[0.2], {
+       Offset[0.]}, 
+      Offset[0.2]}, "RowsIndexed" -> {}},
+  GridDefaultElement:>ButtonBox["\\[Placeholder]"]]], "Input",
+ Deployed->True,
+ Evaluatable->False]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Directory stuff", "Subsection",
+ CellChangeTimes->{{3.47688824124561*^9, 3.4768882424737062`*^9}, {
+  3.5211834068812237`*^9, 3.521183411502277*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"savedDirectory", "=", 
+  RowBox[{"Directory", "[", "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"SetDirectory", "[", "\"\</Users/matthew/Mathematica/Double\>\"", 
+  "]"}]}], "Input"],
+
+Cell[BoxData["\<\"/Users/matthew/Mathematica/Double\"\>"], "Output"],
+
+Cell[BoxData["\<\"/Users/matthew/Mathematica/Double\"\>"], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FileNames", "[", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"Initial.m\"\>", ",", "\<\"Initial.nb\"\>", 
+   ",", "\<\"README.md\"\>"}], "}"}]], "Output"]
+}, Open  ]]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Code for double-entry accounting", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["Account trees and destination table", "Subsubsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"accountTrees", "[", "\"\<business\>\"", "]"}], "=", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"tr", "[", 
+      RowBox[{"\"\<Bank Accounts:\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{"rt", "@", "\"\<Business Account\>\""}], "}"}]}], "]"}], ",", 
+     
+     RowBox[{"tr", "[", 
+      RowBox[{"\"\<Assets:\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"tr", "[", 
+          RowBox[{"\"\<Capital Equipment:\>\"", ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"rt", "@", "\"\<Computer Equipment\>\""}], ",", 
+             RowBox[{"rt", "@", "\"\<Machinery\>\""}]}], "}"}]}], "]"}], ",", 
+         
+         RowBox[{"rt", "@", "\"\<Accounts Receivable\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Buildings\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Cash in Hand\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Land\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Plantations\>\""}]}], "}"}]}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"tr", "[", 
+      RowBox[{"\"\<Liabilities:\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"rt", "@", "\"\<Credit Card\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Accounts Payable\>\""}]}], "}"}]}], "]"}], 
+     ",", "\[IndentingNewLine]", 
+     RowBox[{"tr", "[", 
+      RowBox[{"\"\<Equity:\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"tr", "[", 
+          RowBox[{"\"\<Partners Loan:\>\"", ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"rt", "@", "\"\<Matthew loan\>\""}], ",", 
+             RowBox[{"rt", "@", "\"\<Benita loan\>\""}], ",", 
+             RowBox[{"rt", "@", "\"\<Sky loan\>\""}], ",", 
+             RowBox[{"rt", "@", "\"\<Martin loan\>\""}], ",", 
+             RowBox[{"rt", "@", "\"\<Jenny loan\>\""}]}], "}"}]}], "]"}], ",",
+          "\[IndentingNewLine]", 
+         RowBox[{"tr", "[", 
+          RowBox[{"\"\<Capital:\>\"", ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"rt", "@", "\"\<Matthew capital\>\""}], ",", 
+             RowBox[{"rt", "@", "\"\<Benita capital\>\""}], ",", 
+             RowBox[{"rt", "@", "\"\<Sky capital\>\""}], ",", 
+             RowBox[{"rt", "@", "\"\<Martin capital\>\""}], ",", 
+             RowBox[{"rt", "@", "\"\<Jenny capital\>\""}]}], "}"}]}], "]"}], 
+         ",", 
+         RowBox[{"rt", "@", "\"\<Opening Balances\>\""}]}], "}"}]}], "]"}], 
+     ",", "\[IndentingNewLine]", 
+     RowBox[{"tr", "[", 
+      RowBox[{"\"\<Income:\>\"", ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"rt", "[", "\"\<Interest\>\"", "]"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"tr", "[", 
+          RowBox[{"\"\<Sales:\>\"", ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"tr", "[", 
+              RowBox[{"\"\<Food:\>\"", ",", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"rt", "@", "\"\<Eggs and meat\>\""}], ",", 
+                 RowBox[{"rt", "@", "\"\<Fruit and veg\>\""}]}], "}"}]}], 
+              "]"}], ",", 
+             RowBox[{"rt", "@", "\"\<Services\>\""}], ",", 
+             RowBox[{"rt", "@", "\"\<Grazing\>\""}]}], "}"}]}], "]"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"rt", "@", "\"\<Other Income\>\""}]}], "}"}]}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"tr", "[", 
+      RowBox[{"\"\<Expenses in VAT:\>\"", ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"rt", "@", "\"\<Bank Service Charge\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Dues and Subscriptions\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Miscellaneous\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Office Supplies\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Production\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Postage and Delivery\>\""}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"tr", "[", 
+          RowBox[{"\"\<Professional Fees:\>\"", ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"rt", "@", "\"\<Accounting\>\""}], ",", 
+             RowBox[{"rt", "@", "\"\<Legal Fees\>\""}]}], "}"}]}], "]"}], ",",
+          "\[IndentingNewLine]", 
+         RowBox[{"tr", "[", 
+          RowBox[{"\"\<Services:\>\"", ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"rt", "@", "\"\<Phone\>\""}], ",", 
+             RowBox[{"rt", "@", "\"\<Internet\>\""}]}], "}"}]}], "]"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"rt", "@", "\"\<Rent\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Books\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Software\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Travel\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Marketing\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Fuel\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Equipment\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Materials\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Plants and Trees\>\""}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"tr", "[", 
+          RowBox[{"\"\<Auto:\>\"", ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"rt", "@", "\"\<Auto Tax\>\""}], ",", 
+             RowBox[{"rt", "@", "\"\<Auto Fuel\>\""}], ",", 
+             RowBox[{"rt", "@", "\"\<Auto Maintenance\>\""}]}], "}"}]}], 
+          "]"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"rt", "@", "\"\<Contractors\>\""}]}], "}"}]}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"rt", "@", "\"\<Unspecified\>\""}], " ", 
+     RowBox[{"(*", " ", 
+      RowBox[{"should", " ", 
+       StyleBox["not",
+        FontSlant->"Italic"], " ", "be", " ", "used", " ", "as", " ", "a", 
+       " ", "destination", " ", 
+       RowBox[{"a", "/", "c"}]}], " ", "*)"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"tr", "[", 
+      RowBox[{"\"\<Expenses outside VAT:\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{"tr", "[", 
+         RowBox[{"\"\<Insurance:\>\"", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"rt", "@", "\"\<Liability Insurance\>\""}], ",", 
+            RowBox[{"rt", "@", "\"\<Auto Insurance\>\""}]}], "}"}]}], "]"}], 
+        "}"}]}], "]"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"tr", "[", 
+      RowBox[{"\"\<Emoluments:\>\"", ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"tr", "[", 
+          RowBox[{"\"\<Partners Remuneration:\>\"", ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"rt", "[", "\"\<Matthew Fairtlough\>\"", "]"}], ",", 
+             RowBox[{"rt", "[", "\"\<Benita Verniers\>\"", "]"}], ",", 
+             RowBox[{"rt", "[", "\"\<Martin Foster\>\"", "]"}], ",", 
+             RowBox[{"rt", "[", "\"\<Jenny Foster\>\"", "]"}]}], "}"}]}], 
+          "]"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"tr", "[", 
+          RowBox[{"\"\<Employees:\>\"", ",", 
+           RowBox[{"{", 
+            RowBox[{"rt", "@", "\"\<Gross Salaries\>\""}], "}"}]}], "]"}]}], 
+        "}"}]}], "]"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"tr", "[", 
+      RowBox[{"\"\<VAT:\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"tr", "[", 
+          RowBox[{"\"\<Output:\>\"", ",", 
+           RowBox[{"{", 
+            RowBox[{"rt", "@", "\"\<Sales\>\""}], "}"}]}], "]"}], ",", 
+         RowBox[{"rt", "@", "\"\<Input\>\""}]}], "}"}]}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"tr", "[", 
+      RowBox[{"\"\<Taxes:\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"rt", "@", "\"\<Income Tax\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Corporation Tax\>\""}], ",", 
+         RowBox[{"rt", "@", "\"\<Other Tax\>\""}]}], "}"}]}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"rt", "@", "\"\<Junk\>\""}]}], "\[IndentingNewLine]", "}"}]}], 
+  ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1447, 1091},
+WindowMargins->{{4, Automatic}, {Automatic, 4}},
+Magnification:>1.5 Inherited,
+FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 4, \
+2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 40, 0, 137, "Title"],
+Cell[CellGroupData[{
+Cell[645, 26, 24, 0, 95, "Section"],
+Cell[672, 28, 54, 0, 46, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[763, 33, 150, 2, 95, "Section"],
+Cell[CellGroupData[{
+Cell[938, 39, 47, 0, 65, "Subsection"],
+Cell[988, 41, 164, 3, 43, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1177, 48, 42, 0, 52, "Subsubsection"],
+Cell[1222, 50, 291, 9, 44, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1562, 65, 133, 2, 65, "Subsection"],
+Cell[1698, 69, 508, 16, 76, "Text"],
+Cell[CellGroupData[{
+Cell[2231, 89, 78, 1, 52, "Subsubsection",
+ InitializationGroup->True],
+Cell[2312, 92, 1663, 51, 169, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4012, 148, 57, 0, 52, "Subsubsection"],
+Cell[4072, 150, 759, 16, 136, "Text"],
+Cell[4834, 168, 4059, 128, 322, "Text"],
+Cell[8896, 298, 436, 9, 76, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[9369, 312, 174, 2, 41, "Subsubsection"],
+Cell[9546, 316, 190, 6, 47, "Text"],
+Cell[9739, 324, 505, 15, 94, "Input"],
+Cell[CellGroupData[{
+Cell[10269, 343, 293, 8, 43, "Input"],
+Cell[10565, 353, 192, 5, 43, "Output"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[10806, 364, 137, 1, 41, "Subsubsection"],
+Cell[10946, 367, 2656, 71, 244, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[13639, 443, 106, 1, 41, "Subsubsection"],
+Cell[13748, 446, 440, 12, 44, "Input"],
+Cell[CellGroupData[{
+Cell[14213, 462, 282, 7, 43, "Input"],
+Cell[14498, 471, 173, 4, 43, "Output"]
+}, Open  ]],
+Cell[14686, 478, 497, 16, 69, "Input"],
+Cell[15186, 496, 594, 17, 94, "Input"],
+Cell[CellGroupData[{
+Cell[15805, 517, 471, 10, 43, "Input"],
+Cell[16279, 529, 284, 6, 43, "Output"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[16612, 541, 58, 0, 41, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[16695, 545, 773, 22, 52, "Input"],
+Cell[17471, 569, 678, 20, 52, "Output"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[18198, 595, 114, 1, 41, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[18337, 600, 1208, 33, 94, "Input",
+ InitializationCell->True],
+Cell[19548, 635, 905, 26, 67, "Output"],
+Cell[20456, 663, 905, 26, 67, "Output"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[21410, 695, 70, 0, 41, "Subsubsection"],
+Cell[21483, 697, 650, 14, 77, "Text"],
+Cell[22136, 713, 696, 22, 43, "Input",
+ InitializationGroup->True],
+Cell[22835, 737, 665, 18, 47, "Text"],
+Cell[CellGroupData[{
+Cell[23525, 759, 249, 8, 44, "Input",
+ InitializationCell->True],
+Cell[23777, 769, 445, 10, 43, "Output"]
+}, Open  ]],
+Cell[24237, 782, 320, 7, 47, "Text"],
+Cell[CellGroupData[{
+Cell[24582, 793, 1165, 31, 94, "Input",
+ InitializationGroup->True],
+Cell[25750, 826, 232, 6, 43, "Output"]
+}, Open  ]],
+Cell[25997, 835, 448, 16, 47, "Text"],
+Cell[CellGroupData[{
+Cell[26470, 855, 846, 22, 69, "Input",
+ InitializationGroup->True],
+Cell[27319, 879, 485, 14, 43, "Output"]
+}, Open  ]],
+Cell[27819, 896, 451, 15, 47, "Text"],
+Cell[CellGroupData[{
+Cell[28295, 915, 868, 22, 69, "Input",
+ InitializationGroup->True],
+Cell[29166, 939, 421, 12, 43, "Output"]
+}, Open  ]],
+Cell[29602, 954, 266, 7, 47, "Text"],
+Cell[CellGroupData[{
+Cell[29893, 965, 730, 21, 69, "Input",
+ InitializationGroup->True],
+Cell[30626, 988, 958, 22, 43, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[31621, 1015, 345, 8, 69, "Input"],
+Cell[31969, 1025, 31, 0, 43, "Output"],
+Cell[32003, 1027, 31, 0, 43, "Output"]
+}, Open  ]],
+Cell[32049, 1030, 327, 10, 46, "Text"],
+Cell[CellGroupData[{
+Cell[32401, 1044, 1158, 31, 101, "Input",
+ InitializationCell->True],
+Cell[33562, 1077, 302, 7, 43, "Output"],
+Cell[33867, 1086, 1931, 39, 94, "Output"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[35847, 1131, 183, 2, 41, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[36055, 1137, 1026, 31, 94, "Input",
+ InitializationCell->True],
+Cell[37084, 1170, 1571, 52, 69, "Output"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[38704, 1228, 192, 2, 41, "Subsubsection"],
+Cell[38899, 1232, 452, 11, 105, "Text"],
+Cell[CellGroupData[{
+Cell[39376, 1247, 1797, 48, 144, "Input"],
+Cell[41176, 1297, 1004, 23, 43, "Output"],
+Cell[42183, 1322, 1002, 23, 43, "Output"],
+Cell[43188, 1347, 122, 2, 43, "Output"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[43359, 1355, 38, 0, 41, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[43422, 1359, 381, 8, 44, "Input"],
+Cell[43806, 1369, 174, 4, 43, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[44017, 1378, 341, 7, 44, "Input"],
+Cell[44361, 1387, 157, 3, 43, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[44555, 1395, 467, 13, 44, "Input"],
+Cell[45025, 1410, 120, 3, 43, "Output"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[45194, 1419, 57, 0, 41, "Subsubsection"],
+Cell[45254, 1421, 1671, 49, 137, "Input",
+ Evaluatable->False]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[46974, 1476, 155, 2, 65, "Subsection"],
+Cell[CellGroupData[{
+Cell[47154, 1482, 204, 4, 69, "Input"],
+Cell[47361, 1488, 68, 0, 43, "Output"],
+Cell[47432, 1490, 68, 0, 43, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[47537, 1495, 57, 1, 43, "Input"],
+Cell[47597, 1498, 136, 3, 43, "Output"]
+}, Open  ]]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[47794, 1508, 51, 0, 95, "Section"],
+Cell[CellGroupData[{
+Cell[47870, 1512, 60, 0, 52, "Subsubsection"],
+Cell[47933, 1514, 7960, 184, 844, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
