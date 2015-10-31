@@ -62,9 +62,7 @@ TagBox["\[DoubleVerticalBar]",
 "NotationTemplateTag"]\),zipgen];
 
 
-myMatMult[nn_,mm_]:=Block[{r,c},\[LeftAngleBracket]\[LeftAngleBracket]r.c,c_ \[LeftTriangle] Transpose@nn\[RightAngleBracket],r_ \[LeftTriangle] mm\[RightAngleBracket]]
-myMatMult[RotationMatrix[\[Theta]],RotationMatrix[\[Phi]]]//Simplify//MatrixForm
-RotationMatrix[\[Theta]].RotationMatrix[\[Phi]]//Simplify//MatrixForm
+pluck[e_,l_]:=Block[{x},\[LeftAngleBracket]x,x_ \[LeftTriangle] l,x=!=e\[RightAngleBracket]]
 
 
 r={{a,d},{a,e},{b,d},{b,f},{c,f},{b,d},{e,f},{f,c}};
@@ -103,8 +101,8 @@ prod[{a\[RightTeeArrow]d,b\[RightTeeArrow]d},squares]
 accountTrees["business"]=
 {tr["Bank Accounts:",{rt@"Business Account"}],tr["Assets:",{tr["Capital Equipment:",{rt@"Computer Equipment",rt@"Machinery"}],rt@"Accounts Receivable",rt@"Buildings",rt@"Cash in Hand",rt@"Land",rt@"Plantations"}],
 tr["Liabilities:",{rt@"Credit Card",rt@"Accounts Payable"}],
-tr["Equity:",{tr["Partners Loan:",{rt@"Matthew loan",rt@"Benita loan",rt@"Sky loan",rt@"Martin loan",rt@"Jenny loan"}],
-tr["Capital:",{rt@"Matthew capital",rt@"Benita capital",rt@"Sky capital",rt@"Martin capital",rt@"Jenny capital"}],rt@"Opening Balances"}],
+tr["Equity:",{tr["Partners Loan:",{rt@"Matthew loan",rt@"Beth loan",rt@"Connor loan",rt@"Mack loan",rt@"Agatha loan"}],
+tr["Capital:",{rt@"Matthew capital",rt@"Beth capital",rt@"Connor capital",rt@"Mack capital",rt@"Agata capital"}],rt@"Opening Balances"}],
 tr["Income:",
 {rt["Interest"],
 tr["Sales:",{tr["Food:",{rt@"Eggs and meat",rt@"Fruit and veg"}],rt@"Services",rt@"Grazing"}],
@@ -119,9 +117,49 @@ rt@"Contractors"}],
 rt@"Unspecified" (* should not be used as a destination a/c *),
 tr["Expenses outside VAT:",{tr["Insurance:",{rt@"Liability Insurance",rt@"Auto Insurance"}]}],
 tr["Emoluments:",
-{tr["Partners Remuneration:",{rt["Matthew Fairtlough"],rt["Benita Verniers"],rt["Martin Foster"],rt["Jenny Foster"]}],
+{tr["Partners Remuneration:",{rt["Matthew Fairtlough"],rt["Beth Champion"],rt["Mack Balance"],rt["Agatha Balance"]}],
 tr["Employees:",{rt@"Gross Salaries"}]}],
 tr["VAT:",{tr["Output:",{rt@"Sales"}],rt@"Input"}],
 tr["Taxes:",{rt@"Income Tax",rt@"Corporation Tax",rt@"Other Tax"}],
 rt@"Junk"
 };
+
+
+flat1[ls_List]:=Flatten[ls,1]
+flat1[ob_]:=ob
+
+
+Clear[treeToTabs,forestToTabs]
+treeToTabs[rt[r_],map_,tag_,name_:""]:=
+{r->DynamicModule[{f=name<>r,string="",newMap=Block[{p,q},\[LeftAngleBracket]q,((name<>r)->p_)\[LeftTriangle]map,q_\[LeftTriangle]p\[RightAngleBracket]]},
+Panel[Grid[{
+{Style["String map",Bold],SpanFromLeft},
+{"Name:",InputField[Dynamic[f],String,Enabled->False]},
+{"String:",InputField[Dynamic[string],String]},
+{"",Button["Add string",(newMap=newMap\[Union]{string};globMap[tag]={f->newMap}\[Union]Block[{p,g},\[LeftBracketingBar]p,(p:(g_->_))\[LeftTriangle]globMap[tag],g!=f\[RightBracketingBar]]),BaseStyle->Small]},
+{"",Button["Remove string",(newMap=Complement[newMap,{string}];globMap[tag]={f->newMap}\[Union]Block[{p,g},\[LeftBracketingBar]p,(p:(g_->_))\[LeftTriangle]globMap[tag],g!=f\[RightBracketingBar]]),BaseStyle->Small]},
+{"",Button["Print local map",Print[f->newMap],BaseStyle->Small]}}]]]}
+treeToTabs[tr[h_,t_List],map_,tag_,name_:""]:=
+With[{s=treeToTabs[#,map,tag,name<>h]&/@t},{h->TabView[flat1[s],ControlPlacement->{Center,Top},LabelStyle->Small,Appearance->{"Limited",10}]}]
+forestToTabs[trs_List,map_,tag_]:=TabView[flat1[treeToTabs[#,map,tag]&/@trs],ControlPlacement->{Center,Top},LabelStyle->Small,Appearance->{"Limited",10}]
+
+
+ClearAll[autoNumber]
+autoNumber[Dynamic[data_],fieldName_String:"number",offset_Integer:0]:=
+Do[(data[[i,fieldName]]=offset+i),{i,1,Length[data]}]
+
+
+ClearAll[makeRow]
+makeRow[data_,rowIndex_]:=
+Map[Function[{colIndex},InputField[Dynamic[data[[rowIndex,colIndex]]],Switch[colIndex,1, String,2,String,3,Number],FieldSize->Switch[colIndex,1, 10,2,30,3,10],BaseStyle->{(*SignPadding\[Rule]True,*)(*Text*)Alignment->Right,NumberPadding->{"\t",""},NumberPoint->".",NumberSeparator->","}]],Range[3]]
+SetAttributes[makeRow,HoldAll]
+AssociationThread[{"date","description","value"}->#]&/@Map[makeRow[ccDataShort,#]&,Range[20]]//Dataset
+
+
+tags["food"]={"ROYAL SEVEN","KOFFIEBOONTJE"};
+Dataset[AssociationThread[{"date","desc","value"}->#]&/@ccDataShort][Select[StringMatchQ[#desc,___~~tags["food"]~~___]&]]
+total["food"]=%[Total,"value"]
+len["food"]=%%//Length
+
+
+
