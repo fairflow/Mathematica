@@ -125,6 +125,10 @@ rt@"Junk"
 };
 
 
+Clear[globMap]
+globMap[_]={};
+
+
 flat1[ls_List]:=Flatten[ls,1]
 flat1[ob_]:=ob
 
@@ -147,6 +151,9 @@ forestToTabs[trs_List,map_,tag_]:=TabView[flat1[treeToTabs[#,map,tag]&/@trs],Con
 ClearAll[autoNumber]
 autoNumber[Dynamic[data_],fieldName_String:"number",offset_Integer:0]:=
 Do[(data[[i,fieldName]]=offset+i),{i,1,Length[data]}]
+
+
+ccDataShort={{"29/04/2013","CASHBACK",-0.13`},{"02/05/2013","PAYMENT RECEIVED - THANK YOU",-55.53`},{"05/05/2013","'T KOFFIEBOONTJE AALTER",151.3`},{"","## 00000000179.10 EUR @ 1.183741",0},{"05/05/2013","NON STERLING TRANSACTION FEE",4.16`},{"","## 00000000179.10 EUR @ 0.000000",0},{"18/05/2013","MAPLIN EXETER EX2 EXETER",69.99`},{"28/05/2013","CASHBACK",-0.55`},{"27/05/2013","THE ROYAL SEVEN STARS DEVON",27.6`},{"10/06/2013","WWW.TAYNA.CO.UK INTERNET",232.98`},{"10/06/2013","PAYPAL *ELECTRONCWW 35314369001",80.`},{"11/06/2013","WWW.TAYNA.CO.UK INTERNET",-6.8`},{"19/06/2013","PAYMENT RECEIVED - THANK YOU",-225.32`},{"21/06/2013","DIRECT DEBIT PAYMENT THANK YOU",-5.`},{"24/06/2013","WP-ALLPLAS.CO.UK ONLNE HITCHIN",168.6`},{"24/06/2013","WP-SCOACH ETICKET STOCKPORT",38.5`},{"28/06/2013","CASHBACK",-1.35`},{"01/07/2013","PAYPAL *ELECTRONCWW 35314369001",-7.95`},{"08/07/2013","THE MILL ON THE EXE EXETER",33.5`},{"08/07/2013","B & Q EXETER EXR166",73.86`}};
 
 
 ClearAll[makeRow]
