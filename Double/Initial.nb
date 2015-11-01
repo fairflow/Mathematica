@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    545592,      11764]
-NotebookOptionsPosition[    536558,      11455]
-NotebookOutlinePosition[    537341,      11488]
-CellTagsIndexPosition[    537242,      11482]
+NotebookDataLength[    559480,      12065]
+NotebookOptionsPosition[    549932,      11740]
+NotebookOutlinePosition[    550715,      11773]
+CellTagsIndexPosition[    550616,      11767]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -431,7 +431,7 @@ Cell[BoxData[
    ",", "4"}], "}"}]], "Output",
  CellChangeTimes->{3.546002845044282*^9}]
 }, Open  ]]
-}, Open  ]],
+}, Closed]],
 
 Cell[CellGroupData[{
 
@@ -880,7 +880,12 @@ Cell[BoxData[GridBox[{
   GridDefaultElement:>ButtonBox["\\[Placeholder]"]]], "Input",
  Deployed->True,
  Evaluatable->False,
- CellTags->"palette"],
+ CellTags->"palette"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["How to view information about a palette", "Subsubsection"],
 
 Cell["\<\
 Replace the directories used below with the installation directory for this \
@@ -935,7 +940,7 @@ Cell[BoxData[
      TemplateBox[{"FrontEndObject[LinkObject[\"ekuur_shm\", 3, 1]]","4"},
       "NotebookObjectMissing"], "}"}]}]}], "}"}]], "Output"]
 }, Closed]]
-}, Open  ]]
+}, Closed]]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -1670,7 +1675,7 @@ Cell[BoxData[
 
 Cell[CellGroupData[{
 
-Cell["Design considerations", "Section"],
+Cell["Design considerations for double-entry accounting", "Section"],
 
 Cell[CellGroupData[{
 
@@ -1715,7 +1720,7 @@ sophisticated, perhaps even a separate tab or window."
 }], "Text"],
 
 Cell["\<\
-The use of monad comprehensions is not essential and may not be desireable in \
+The use of monad comprehensions is not essential and may not be desirable in \
 the end but MF has found it useful to construct code in a highly declarative \
 way.\
 \>", "Text"],
@@ -1948,29 +1953,124 @@ Cell[BoxData[
   ";"}]], "Input",
  InitializationCell->True],
 
+Cell[CellGroupData[{
+
+Cell["Showing and saving maps for a set of accounts", "Subsubsection"],
+
+Cell[TextData[{
+ "Below is an example of a map.  The idea is that certain patterns in the \
+description field determine which accounts the transaction involves.  This \
+information is later used to create a ",
+ StyleBox[".qif", "Input"],
+ " file with the correct account information. It may be possible to determine \
+splits automatically as well for ",
+ StyleBox[".qif", "Input"],
+ " export but this is not done here."
+}], "Text"],
+
 Cell[BoxData[{
  RowBox[{"Clear", "[", "globMap", "]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
+   RowBox[{"globMap", "[", "\"\<business\>\"", "]"}], "=", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\"\<Assets:Cash in Hand\>\"", "\[Rule]", 
+      RowBox[{"{", "\"\<ATM Debit\>\"", "}"}]}], ",", 
+     RowBox[{"\"\<Equity:Partners Loan\>\"", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"\"\<TFR xxxx\>\"", ",", "\"\<TFR xxxx\>\""}], "}"}]}], ",", 
+     RowBox[{"\"\<Expenses in VAT:Dues and Subscriptions\>\"", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"\"\<COMPANIES HSE\>\"", ",", "\"\<FWAG\>\""}], "}"}]}], ",", 
+     RowBox[{"\"\<Expenses in VAT:Equipment\>\"", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+       "\"\<ENDSLEIGH GAR\>\"", ",", "\"\<HARRIS & SON\>\"", ",", 
+        "\"\<MACHINE MART\>\"", ",", "\"\<MAPLIN EXETER\>\"", ",", 
+        "\"\<MOLE AVON\>\"", ",", "\"\<MP HARDWARE\>\""}], "}"}]}], ",", 
+     RowBox[{"\"\<Expenses in VAT:Fuel\>\"", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"\"\<TEXSHINNERSBR\>\"", ",", "\"\<W M MORRISON\>\""}], 
+       "}"}]}], ",", 
+     RowBox[{"\"\<Expenses in VAT:Materials\>\"", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+       "\"\<B & Q\>\"", ",", "\"\<CORNWALL FARM\>\"", ",", 
+        "\"\<CREATIVE CRAF\>\"", ",", "\"\<FERMOYS\>\"", ",", 
+        "\"\<FIRST TUNNELS\>\"", ",", "\"\<INTER-LINE\>\"", ",", 
+        "\"\<PIPE STOCK\>\"", ",", "\"\<RAINWATERPROD\>\"", ",", 
+        "\"\<SOUTHERN TIMB\>\"", ",", "\"\<TRAGO NEWTON\>\"", ",", 
+        "\"\<UNITED ROOFIN\>\"", ",", "\"\<WP-ALLPLAS\>\"", ",", 
+        "\"\<WWW.KIOWA\>\""}], "}"}]}], ",", 
+     RowBox[{"\"\<Expenses in VAT:Plants and Trees\>\"", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+       "\"\<MOLES SEEDS\>\"", ",", "\"\<ORGANICCATALO\>\"", ",", 
+        "\"\<TAMAR ORGANIC\>\"", ",", "\"\<THE REAL SEED\>\"", ",", 
+        "\"\<WOODLAND TRUST\>\"", ",", "\"\<WWW.SOWSEEDS\>\"", ",", 
+        "\"\<WWW.SUTTONS-S\>\""}], "}"}]}], ",", 
+     RowBox[{"\"\<Expenses in VAT:Production\>\"", "\[Rule]", 
+      RowBox[{"{", "\"\<CORNWALL FARM\>\"", "}"}]}], ",", 
+     RowBox[{"\"\<Expenses in VAT:Software\>\"", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+       "\"\<WEB HOSTING\>\"", ",", "\"\<WWW.ANDIC\>\"", ",", 
+        "\"\<WWW.ANDICA\>\"", ",", "\"\<WWW.TAXSH\>\"", ",", 
+        "\"\<WWW.TAXSHIELD\>\""}], "}"}]}], ",", 
+     RowBox[{"\"\<Income:Interest\>\"", "\[Rule]", 
+      RowBox[{"{", "\"\<Bank Credit Interest\>\"", "}"}]}], ",", 
+     RowBox[{"\"\<Income:Other Income\>\"", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"\"\<ANNUAL BONUS\>\"", ",", "\"\<National Giro Credit\>\""}], 
+       "}"}]}], ",", 
+     RowBox[{"\"\<Income:Sales:Food:Fruit and veg\>\"", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+       "\"\<DETOX RETREATS LTD\>\"", ",", 
+        "\"\<Faster Payment BEHRENS F & C\>\"", ",", 
+        "\"\<Faster Payment B Kellett\>\"", ",", 
+        "\"\<Faster Payment THRIVE CAFE RETAIL\>\"", ",", 
+        "\"\<National Giro Credit\>\""}], "}"}]}], ",", 
+     RowBox[{"\"\<VAT:Input\>\"", "\[Rule]", 
+      RowBox[{"{", "\"\<HMRC VAT REPAY\>\"", "}"}]}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
    RowBox[{"globMap", "[", "_", "]"}], "=", 
    RowBox[{"{", "}"}]}], ";"}]}], "Input",
- InitializationCell->True,
- CellChangeTimes->{{3.547320660515975*^9, 3.5473206643655*^9}, {
-  3.547321810425602*^9, 3.5473218214279613`*^9}}],
+ InitializationCell->True],
 
 Cell[BoxData[{
+ RowBox[{"Clear", "[", "flat1", "]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"flat1", "[", "ls_List", "]"}], ":=", 
   RowBox[{"Flatten", "[", 
    RowBox[{"ls", ",", "1"}], "]"}]}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"flat1", "[", "ob_", "]"}], ":=", "ob"}]}], "Input",
- InitializationCell->True,
- CellChangeTimes->{{3.532603935818219*^9, 3.532603968561473*^9}}],
+ InitializationCell->True],
 
-Cell[CellGroupData[{
-
-Cell["Showing and saving maps for a set of accounts", "Subsubsection"],
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"expandMap", "[", "map_", "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"x", ",", "y", ",", "z"}], "}"}], ",", 
+    RowBox[{"\[LeftBracketingBar]", 
+     RowBox[{
+      RowBox[{"z", "\[Rule]", "x"}], ",", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"x_", "\[Rule]", "y_"}], ")"}], "\[LeftTriangle]", "map"}], 
+      ",", 
+      RowBox[{"z_", "\[LeftTriangle]", "y"}]}], "\[RightBracketingBar]"}]}], 
+   "]"}]}]], "Input",
+ InitializationGroup->True,
+ CellChangeTimes->{{3.547323486932034*^9, 3.547323642912445*^9}, {
+   3.547364454368484*^9, 3.547364455817918*^9}, 3.566704871048023*^9}],
 
 Cell[BoxData[{
  RowBox[{"Clear", "[", 
@@ -2252,7 +2352,7 @@ Cell[BoxData[
 
 Cell[BoxData[
  TagBox[
-  DynamicModuleBox[{Typeset`var$$ = 4}, 
+  DynamicModuleBox[{Typeset`var$$ = 6}, 
    InterpretationBox[
     DynamicModuleBox[{DynamicDump`width$$ = 10, DynamicDump`jump$$ = 10, 
      DynamicDump`tabdata$$ = {{
@@ -2527,7 +2627,7 @@ $CellContext`globMap["business"] =
           4, "\"Cash in Hand\"" -> 
            DynamicModuleBox[{$CellContext`f$$ = 
               "Assets:Cash in Hand", $CellContext`string$$ = 
-              "", $CellContext`newMap$$ = {}}, 
+              "", $CellContext`newMap$$ = {"ATM Debit"}}, 
              PanelBox[
               TagBox[
                GridBox[{{
@@ -3375,7 +3475,7 @@ $CellContext`globMap["business"] =
           1, "\"Interest\"" -> 
            DynamicModuleBox[{$CellContext`f$$ = 
               "Income:Interest", $CellContext`string$$ = 
-              "", $CellContext`newMap$$ = {}}, 
+              "", $CellContext`newMap$$ = {"Bank Credit Interest"}}, 
              PanelBox[
               TagBox[
                GridBox[{{
@@ -3483,7 +3583,11 @@ $CellContext`globMap["business"] =
                   2, "\"Fruit and veg\"" -> 
                    DynamicModuleBox[{$CellContext`f$$ = 
                     "Income:Sales:Food:Fruit and veg", $CellContext`string$$ = 
-                    "", $CellContext`newMap$$ = {}}, 
+                    "", $CellContext`newMap$$ = {
+                    "DETOX RETREATS LTD", "Faster Payment BEHRENS F & C", 
+                    "Faster Payment B Kellett", 
+                    "Faster Payment THRIVE CAFE RETAIL", 
+                    "National Giro Credit"}}, 
                     PanelBox[
                     TagBox[
                     GridBox[{{
@@ -3641,7 +3745,8 @@ $CellContext`globMap["business"] =
           3, "\"Other Income\"" -> 
            DynamicModuleBox[{$CellContext`f$$ = 
               "Income:Other Income", $CellContext`string$$ = 
-              "", $CellContext`newMap$$ = {}}, 
+              "", $CellContext`newMap$$ = {
+               "ANNUAL BONUS", "National Giro Credit"}}, 
              PanelBox[
               TagBox[
                GridBox[{{
@@ -3753,7 +3858,8 @@ $CellContext`globMap["business"] =
                2, "\"Dues and Subscriptions\"" -> 
                 DynamicModuleBox[{$CellContext`f$$ = 
                    "Expenses in VAT:Dues and Subscriptions", \
-$CellContext`string$$ = "", $CellContext`newMap$$ = {}}, 
+$CellContext`string$$ = 
+                   "", $CellContext`newMap$$ = {"COMPANIES HSE", "FWAG"}}, 
                   PanelBox[
                    TagBox[
                     GridBox[{{
@@ -3909,7 +4015,7 @@ $CellContext`globMap["business"] =
                5, "\"Production\"" -> 
                 DynamicModuleBox[{$CellContext`f$$ = 
                    "Expenses in VAT:Production", $CellContext`string$$ = 
-                   "", $CellContext`newMap$$ = {}}, 
+                   "", $CellContext`newMap$$ = {"CORNWALL FARM"}}, 
                   PanelBox[
                    TagBox[
                     GridBox[{{
@@ -4331,7 +4437,9 @@ $CellContext`globMap["business"] =
                11, "\"Software\"" -> 
                 DynamicModuleBox[{$CellContext`f$$ = 
                    "Expenses in VAT:Software", $CellContext`string$$ = 
-                   "", $CellContext`newMap$$ = {}}, 
+                   "", $CellContext`newMap$$ = {
+                    "WEB HOSTING", "WWW.ANDIC", "WWW.ANDICA", "WWW.TAXSH", 
+                    "WWW.TAXSHIELD"}}, 
                   PanelBox[
                    TagBox[
                     GridBox[{{
@@ -4449,6 +4557,7 @@ $CellContext`globMap["business"] =
                     ButtonBox[
                     "\"Add string\"", 
                     ButtonFunction :> ($CellContext`newMap$$ = 
+                    
                     Union[$CellContext`newMap$$, {$CellContext`string$$}]; \
 $CellContext`globMap["business"] = 
                     Union[{$CellContext`f$$ -> $CellContext`newMap$$}, 
@@ -4487,7 +4596,8 @@ $CellContext`globMap["business"] =
                14, "\"Fuel\"" -> 
                 DynamicModuleBox[{$CellContext`f$$ = 
                    "Expenses in VAT:Fuel", $CellContext`string$$ = 
-                   "", $CellContext`newMap$$ = {}}, 
+                   "", $CellContext`newMap$$ = {
+                    "TEXSHINNERSBR", "W M MORRISON"}}, 
                   PanelBox[
                    TagBox[
                     GridBox[{{
@@ -4539,7 +4649,9 @@ $CellContext`globMap["business"] =
                15, "\"Equipment\"" -> 
                 DynamicModuleBox[{$CellContext`f$$ = 
                    "Expenses in VAT:Equipment", $CellContext`string$$ = 
-                   "", $CellContext`newMap$$ = {}}, 
+                   "", $CellContext`newMap$$ = {
+                    "ENDSLEIGH GAR", "HARRIS & SON", "MACHINE MART", 
+                    "MAPLIN EXETER", "MOLE AVON", "MP HARDWARE"}}, 
                   PanelBox[
                    TagBox[
                     GridBox[{{
@@ -4591,7 +4703,11 @@ $CellContext`globMap["business"] =
                16, "\"Materials\"" -> 
                 DynamicModuleBox[{$CellContext`f$$ = 
                    "Expenses in VAT:Materials", $CellContext`string$$ = 
-                   "", $CellContext`newMap$$ = {}}, 
+                   "", $CellContext`newMap$$ = {
+                    "B & Q", "CORNWALL FARM", "CREATIVE CRAF", "FERMOYS", 
+                    "FIRST TUNNELS", "INTER-LINE", "PIPE STOCK", 
+                    "RAINWATERPROD", "SOUTHERN TIMB", "TRAGO NEWTON", 
+                    "UNITED ROOFIN", "WP-ALLPLAS", "WWW.KIOWA"}}, 
                   PanelBox[
                    TagBox[
                     GridBox[{{
@@ -4643,7 +4759,10 @@ $CellContext`globMap["business"] =
                17, "\"Plants and Trees\"" -> 
                 DynamicModuleBox[{$CellContext`f$$ = 
                    "Expenses in VAT:Plants and Trees", $CellContext`string$$ = 
-                   "", $CellContext`newMap$$ = {}}, 
+                   "", $CellContext`newMap$$ = {
+                    "MOLES SEEDS", "ORGANICCATALO", "TAMAR ORGANIC", 
+                    "THE REAL SEED", "WOODLAND TRUST", "WWW.SOWSEEDS", 
+                    "WWW.SUTTONS-S"}}, 
                   PanelBox[
                    TagBox[
                     GridBox[{{
@@ -4711,7 +4830,6 @@ $CellContext`globMap["business"] =
                     ButtonBox[
                     "\"Add string\"", 
                     ButtonFunction :> ($CellContext`newMap$$ = 
-                    
                     Union[$CellContext`newMap$$, {$CellContext`string$$}]; \
 $CellContext`globMap["business"] = 
                     Union[{$CellContext`f$$ -> $CellContext`newMap$$}, 
@@ -4937,7 +5055,8 @@ $CellContext`globMap["business"] =
                  Inequality[
                  0, LessEqual, DynamicDump`index$$ - DynamicDump`start$$, 
                   Less, DynamicDump`width$$], None, DynamicDump`start$$ = 
-                 Clip[Floor[(DynamicDump`index$$ - 1)/DynamicDump`jump$$] 
+                 Clip[
+                  Floor[(DynamicDump`index$$ - 1)/DynamicDump`jump$$] 
                     DynamicDump`jump$$ + 1, {1, DynamicDump`maxstart$$}]]; 
                Typeset`var$$, 
                Switch[#, Typeset`first, DynamicDump`start$$ = 1; 
@@ -5012,7 +5131,7 @@ $CellContext`globMap["business"] =
              "Dues and Subscriptions" -> 
              DynamicModule[{$CellContext`f = 
                 "Expenses in VAT:Dues and Subscriptions", $CellContext`string = 
-                "", $CellContext`newMap = {}}, 
+                "", $CellContext`newMap = {"COMPANIES HSE", "FWAG"}}, 
                Panel[
                 Grid[{{
                    Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -5132,7 +5251,7 @@ $CellContext`globMap["business"] =
                     Small]}}]], DynamicModuleValues :> {}], "Production" -> 
              DynamicModule[{$CellContext`f = 
                 "Expenses in VAT:Production", $CellContext`string = 
-                "", $CellContext`newMap = {}}, 
+                "", $CellContext`newMap = {"CORNWALL FARM"}}, 
                Panel[
                 Grid[{{
                    Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -5462,7 +5581,9 @@ $CellContext`globMap["business"] =
                     Small]}}]], DynamicModuleValues :> {}], "Software" -> 
              DynamicModule[{$CellContext`f = 
                 "Expenses in VAT:Software", $CellContext`string = 
-                "", $CellContext`newMap = {}}, 
+                "", $CellContext`newMap = {
+                 "WEB HOSTING", "WWW.ANDIC", "WWW.ANDICA", "WWW.TAXSH", 
+                  "WWW.TAXSHIELD"}}, 
                Panel[
                 Grid[{{
                    Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -5582,7 +5703,8 @@ $CellContext`globMap["business"] =
                     Small]}}]], DynamicModuleValues :> {}], "Fuel" -> 
              DynamicModule[{$CellContext`f = 
                 "Expenses in VAT:Fuel", $CellContext`string = 
-                "", $CellContext`newMap = {}}, 
+                "", $CellContext`newMap = {"TEXSHINNERSBR", "W M MORRISON"}}, 
+               
                Panel[
                 Grid[{{
                    Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -5622,7 +5744,9 @@ $CellContext`globMap["business"] =
                     Small]}}]], DynamicModuleValues :> {}], "Equipment" -> 
              DynamicModule[{$CellContext`f = 
                 "Expenses in VAT:Equipment", $CellContext`string = 
-                "", $CellContext`newMap = {}}, 
+                "", $CellContext`newMap = {
+                 "ENDSLEIGH GAR", "HARRIS & SON", "MACHINE MART", 
+                  "MAPLIN EXETER", "MOLE AVON", "MP HARDWARE"}}, 
                Panel[
                 Grid[{{
                    Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -5662,7 +5786,11 @@ $CellContext`globMap["business"] =
                     Small]}}]], DynamicModuleValues :> {}], "Materials" -> 
              DynamicModule[{$CellContext`f = 
                 "Expenses in VAT:Materials", $CellContext`string = 
-                "", $CellContext`newMap = {}}, 
+                "", $CellContext`newMap = {
+                 "B & Q", "CORNWALL FARM", "CREATIVE CRAF", "FERMOYS", 
+                  "FIRST TUNNELS", "INTER-LINE", "PIPE STOCK", 
+                  "RAINWATERPROD", "SOUTHERN TIMB", "TRAGO NEWTON", 
+                  "UNITED ROOFIN", "WP-ALLPLAS", "WWW.KIOWA"}}, 
                Panel[
                 Grid[{{
                    Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -5703,7 +5831,10 @@ $CellContext`globMap["business"] =
              "Plants and Trees" -> 
              DynamicModule[{$CellContext`f = 
                 "Expenses in VAT:Plants and Trees", $CellContext`string = 
-                "", $CellContext`newMap = {}}, 
+                "", $CellContext`newMap = {
+                 "MOLES SEEDS", "ORGANICCATALO", "TAMAR ORGANIC", 
+                  "THE REAL SEED", "WOODLAND TRUST", "WWW.SOWSEEDS", 
+                  "WWW.SUTTONS-S"}}, 
                Panel[
                 Grid[{{
                    Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -6400,7 +6531,7 @@ $CellContext`globMap["business"] =
           2, "\"Input\"" -> 
            DynamicModuleBox[{$CellContext`f$$ = 
               "VAT:Input", $CellContext`string$$ = 
-              "", $CellContext`newMap$$ = {}}, 
+              "", $CellContext`newMap$$ = {"HMRC VAT REPAY"}}, 
              PanelBox[
               TagBox[
                GridBox[{{
@@ -6640,6 +6771,7 @@ $CellContext`globMap["business"] =
               ButtonBox[
               "\"Remove string\"", 
                ButtonFunction :> ($CellContext`newMap$$ = 
+                 
                  Complement[$CellContext`newMap$$, {$CellContext`string$$}]; \
 $CellContext`globMap["business"] = 
                  Union[{$CellContext`f$$ -> $CellContext`newMap$$}, 
@@ -6660,7 +6792,7 @@ $CellContext`globMap["business"] =
             GridBoxItemSize -> {
              "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], "Grid"]], 
          DynamicModuleValues :> {}]}}, DynamicDump`start$$ = 1, 
-     DynamicDump`maxstart$$ = 3, DynamicDump`index$$ = 4}, 
+     DynamicDump`maxstart$$ = 3, DynamicDump`index$$ = 6}, 
      DynamicBox[TabViewBox[{{Typeset`first, (StyleBox[#, 
            CurrentValue[{"ControlsFontSize", Large}], FontColor -> 
            If[#2 === #3, Gray, Black]]& )[
@@ -6716,7 +6848,7 @@ $CellContext`globMap["business"] =
          
          Blank[][Method, 
           Blank[]]]]],
-      ImageSizeCache->{1143., {207., 215.}}],
+      ImageSizeCache->{958., {207., 215.}}],
      DynamicModuleValues:>{}],
     TabView[{
      "Bank Accounts:" -> 
@@ -6930,7 +7062,7 @@ $CellContext`globMap["business"] =
                 Small]}}]], DynamicModuleValues :> {}], "Cash in Hand" -> 
          DynamicModule[{$CellContext`f = 
             "Assets:Cash in Hand", $CellContext`string = 
-            "", $CellContext`newMap = {}}, 
+            "", $CellContext`newMap = {"ATM Debit"}}, 
            Panel[
             Grid[{{
                Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -7588,7 +7720,7 @@ $CellContext`globMap["business"] =
       TabView[{"Interest" -> 
          DynamicModule[{$CellContext`f = 
             "Income:Interest", $CellContext`string = 
-            "", $CellContext`newMap = {}}, 
+            "", $CellContext`newMap = {"Bank Credit Interest"}}, 
            Panel[
             Grid[{{
                Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -7612,7 +7744,6 @@ $CellContext`globMap["business"] =
                 BaseStyle -> Small]}, {"", 
                Button[
                "Remove string", $CellContext`newMap = 
-                 
                  Complement[$CellContext`newMap, {$CellContext`string}]; \
 $CellContext`globMap["business"] = 
                  Union[{$CellContext`f -> $CellContext`newMap}, 
@@ -7656,7 +7787,6 @@ $CellContext`globMap["business"] =
                     BaseStyle -> Small]}, {"", 
                     Button[
                     "Remove string", $CellContext`newMap = 
-                    
                     Complement[$CellContext`newMap, {$CellContext`string}]; \
 $CellContext`globMap["business"] = 
                     Union[{$CellContext`f -> $CellContext`newMap}, 
@@ -7673,7 +7803,11 @@ $CellContext`globMap["business"] =
                     Small]}}]], DynamicModuleValues :> {}], "Fruit and veg" -> 
                DynamicModule[{$CellContext`f = 
                   "Income:Sales:Food:Fruit and veg", $CellContext`string = 
-                  "", $CellContext`newMap = {}}, 
+                  "", $CellContext`newMap = {
+                   "DETOX RETREATS LTD", "Faster Payment BEHRENS F & C", 
+                    "Faster Payment B Kellett", 
+                    "Faster Payment THRIVE CAFE RETAIL", 
+                    "National Giro Credit"}}, 
                  Panel[
                   Grid[{{
                     Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -7797,7 +7931,8 @@ $CellContext`globMap["business"] =
            Appearance -> {"Limited", 10}], "Other Income" -> 
          DynamicModule[{$CellContext`f = 
             "Income:Other Income", $CellContext`string = 
-            "", $CellContext`newMap = {}}, 
+            "", $CellContext`newMap = {
+             "ANNUAL BONUS", "National Giro Credit"}}, 
            Panel[
             Grid[{{
                Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -7881,7 +8016,7 @@ $CellContext`globMap["business"] =
          "Dues and Subscriptions" -> 
          DynamicModule[{$CellContext`f = 
             "Expenses in VAT:Dues and Subscriptions", $CellContext`string = 
-            "", $CellContext`newMap = {}}, 
+            "", $CellContext`newMap = {"COMPANIES HSE", "FWAG"}}, 
            Panel[
             Grid[{{
                Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -7985,6 +8120,7 @@ $CellContext`globMap["business"] =
                 BaseStyle -> Small]}, {"", 
                Button[
                "Remove string", $CellContext`newMap = 
+                 
                  Complement[$CellContext`newMap, {$CellContext`string}]; \
 $CellContext`globMap["business"] = 
                  Union[{$CellContext`f -> $CellContext`newMap}, 
@@ -8001,7 +8137,7 @@ $CellContext`globMap["business"] =
                 Small]}}]], DynamicModuleValues :> {}], "Production" -> 
          DynamicModule[{$CellContext`f = 
             "Expenses in VAT:Production", $CellContext`string = 
-            "", $CellContext`newMap = {}}, 
+            "", $CellContext`newMap = {"CORNWALL FARM"}}, 
            Panel[
             Grid[{{
                Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -8329,7 +8465,9 @@ $CellContext`globMap["business"] =
                 Small]}}]], DynamicModuleValues :> {}], "Software" -> 
          DynamicModule[{$CellContext`f = 
             "Expenses in VAT:Software", $CellContext`string = 
-            "", $CellContext`newMap = {}}, 
+            "", $CellContext`newMap = {
+             "WEB HOSTING", "WWW.ANDIC", "WWW.ANDICA", "WWW.TAXSH", 
+              "WWW.TAXSHIELD"}}, 
            Panel[
             Grid[{{
                Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -8449,7 +8587,7 @@ $CellContext`globMap["business"] =
                 Small]}}]], DynamicModuleValues :> {}], "Fuel" -> 
          DynamicModule[{$CellContext`f = 
             "Expenses in VAT:Fuel", $CellContext`string = 
-            "", $CellContext`newMap = {}}, 
+            "", $CellContext`newMap = {"TEXSHINNERSBR", "W M MORRISON"}}, 
            Panel[
             Grid[{{
                Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -8489,7 +8627,9 @@ $CellContext`globMap["business"] =
                 Small]}}]], DynamicModuleValues :> {}], "Equipment" -> 
          DynamicModule[{$CellContext`f = 
             "Expenses in VAT:Equipment", $CellContext`string = 
-            "", $CellContext`newMap = {}}, 
+            "", $CellContext`newMap = {
+             "ENDSLEIGH GAR", "HARRIS & SON", "MACHINE MART", "MAPLIN EXETER",
+               "MOLE AVON", "MP HARDWARE"}}, 
            Panel[
             Grid[{{
                Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -8529,7 +8669,11 @@ $CellContext`globMap["business"] =
                 Small]}}]], DynamicModuleValues :> {}], "Materials" -> 
          DynamicModule[{$CellContext`f = 
             "Expenses in VAT:Materials", $CellContext`string = 
-            "", $CellContext`newMap = {}}, 
+            "", $CellContext`newMap = {
+             "B & Q", "CORNWALL FARM", "CREATIVE CRAF", "FERMOYS", 
+              "FIRST TUNNELS", "INTER-LINE", "PIPE STOCK", "RAINWATERPROD", 
+              "SOUTHERN TIMB", "TRAGO NEWTON", "UNITED ROOFIN", "WP-ALLPLAS", 
+              "WWW.KIOWA"}}, 
            Panel[
             Grid[{{
                Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -8569,7 +8713,9 @@ $CellContext`globMap["business"] =
                 Small]}}]], DynamicModuleValues :> {}], "Plants and Trees" -> 
          DynamicModule[{$CellContext`f = 
             "Expenses in VAT:Plants and Trees", $CellContext`string = 
-            "", $CellContext`newMap = {}}, 
+            "", $CellContext`newMap = {
+             "MOLES SEEDS", "ORGANICCATALO", "TAMAR ORGANIC", "THE REAL SEED",
+               "WOODLAND TRUST", "WWW.SOWSEEDS", "WWW.SUTTONS-S"}}, 
            Panel[
             Grid[{{
                Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -8812,7 +8958,8 @@ $CellContext`globMap["business"] =
             Button["Print local map", 
              Print[$CellContext`f -> $CellContext`newMap], BaseStyle -> 
              Small]}}]], DynamicModuleValues :> {}], "Expenses outside VAT:" -> 
-      TabView[{"Insurance:" -> 
+      TabView[{
+        "Insurance:" -> 
          TabView[{
            "Liability Insurance" -> 
             DynamicModule[{$CellContext`f = 
@@ -9153,7 +9300,7 @@ $CellContext`globMap["business"] =
            ControlPlacement -> {Center, Top}, LabelStyle -> Small, 
            Appearance -> {"Limited", 10}], "Input" -> 
          DynamicModule[{$CellContext`f = "VAT:Input", $CellContext`string = 
-            "", $CellContext`newMap = {}}, 
+            "", $CellContext`newMap = {"HMRC VAT REPAY"}}, 
            Panel[
             Grid[{{
                Style["String map", Bold], SpanFromLeft}, {"Name:", 
@@ -9358,7 +9505,151 @@ $CellContext`globMap["business"] =
      ControlPlacement -> {Center, Top}, LabelStyle -> Small, 
      Appearance -> {"Limited", 10}]],
    DynamicModuleValues:>{}],
-  Setting[#, {0}]& ]], "Output"]
+  Setting[#, {0}]& ]], "Output"],
+
+Cell[BoxData[
+ RowBox[{"\<\"Expenses in VAT:Materials\"\>", "\[Rule]", 
+  RowBox[{"{", 
+   RowBox[{"\<\"B & Q\"\>", ",", "\<\"CORNWALL FARM\"\>", 
+    ",", "\<\"CREATIVE CRAF\"\>", ",", "\<\"FERMOYS\"\>", 
+    ",", "\<\"FIRST TUNNELS\"\>", ",", "\<\"INTER-LINE\"\>", 
+    ",", "\<\"PIPE STOCK\"\>", ",", "\<\"RAINWATERPROD\"\>", 
+    ",", "\<\"SOUTHERN TIMB\"\>", ",", "\<\"TRAGO NEWTON\"\>", 
+    ",", "\<\"UNITED ROOFIN\"\>", ",", "\<\"WP-ALLPLAS\"\>", 
+    ",", "\<\"WWW.KIOWA\"\>"}], "}"}]}]], "Print"]
+}, Open  ]],
+
+Cell["\<\
+For export purposes, these maps need to be \[OpenCurlyDoubleQuote]expanded\
+\[CloseCurlyDoubleQuote] (and also reversed) so that each string is mapped to \
+the associated account. The expansion could be done \[OpenCurlyDoubleQuote]on \
+the fly\[CloseCurlyDoubleQuote] but here the entire map is massaged into the \
+correct form:\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"expandMap", "[", "map_", "]"}], ":=", 
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"x", ",", "y", ",", "z"}], "}"}], ",", 
+    RowBox[{"\[LeftBracketingBar]", 
+     RowBox[{
+      RowBox[{"z", "\[Rule]", "x"}], ",", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"x_", "\[Rule]", "y_"}], ")"}], "\[LeftTriangle]", "map"}], 
+      ",", 
+      RowBox[{"z_", "\[LeftTriangle]", "y"}]}], "\[RightBracketingBar]"}]}], 
+   "]"}]}]], "Input",
+ InitializationGroup->True,
+ CellChangeTimes->{{3.547323486932034*^9, 3.547323642912445*^9}, {
+   3.547364454368484*^9, 3.547364455817918*^9}, 3.566704871048023*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"expandMap", "@", 
+  RowBox[{"globMap", "[", "\"\<business\>\"", "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"\<\"ATM Debit\"\>", "\[Rule]", "\<\"Assets:Cash in Hand\"\>"}], 
+   ",", 
+   RowBox[{"\<\"TFR xxxx\"\>", "\[Rule]", "\<\"Equity:Partners Loan\"\>"}], 
+   ",", 
+   RowBox[{"\<\"COMPANIES HSE\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Dues and Subscriptions\"\>"}], ",", 
+   RowBox[{"\<\"FWAG\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Dues and Subscriptions\"\>"}], ",", 
+   RowBox[{"\<\"ENDSLEIGH GAR\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Equipment\"\>"}], ",", 
+   RowBox[{"\<\"HARRIS & SON\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Equipment\"\>"}], ",", 
+   RowBox[{"\<\"MACHINE MART\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Equipment\"\>"}], ",", 
+   RowBox[{"\<\"MAPLIN EXETER\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Equipment\"\>"}], ",", 
+   RowBox[{"\<\"MOLE AVON\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Equipment\"\>"}], ",", 
+   RowBox[{"\<\"MP HARDWARE\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Equipment\"\>"}], ",", 
+   RowBox[{"\<\"TEXSHINNERSBR\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Fuel\"\>"}], ",", 
+   RowBox[{"\<\"W M MORRISON\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Fuel\"\>"}], ",", 
+   RowBox[{"\<\"B & Q\"\>", "\[Rule]", "\<\"Expenses in VAT:Materials\"\>"}], 
+   ",", 
+   RowBox[{"\<\"CORNWALL FARM\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Materials\"\>"}], ",", 
+   RowBox[{"\<\"CREATIVE CRAF\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Materials\"\>"}], ",", 
+   RowBox[{"\<\"FERMOYS\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Materials\"\>"}], ",", 
+   RowBox[{"\<\"FIRST TUNNELS\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Materials\"\>"}], ",", 
+   RowBox[{"\<\"INTER-LINE\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Materials\"\>"}], ",", 
+   RowBox[{"\<\"PIPE STOCK\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Materials\"\>"}], ",", 
+   RowBox[{"\<\"RAINWATERPROD\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Materials\"\>"}], ",", 
+   RowBox[{"\<\"SOUTHERN TIMB\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Materials\"\>"}], ",", 
+   RowBox[{"\<\"TRAGO NEWTON\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Materials\"\>"}], ",", 
+   RowBox[{"\<\"UNITED ROOFIN\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Materials\"\>"}], ",", 
+   RowBox[{"\<\"WP-ALLPLAS\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Materials\"\>"}], ",", 
+   RowBox[{"\<\"WWW.KIOWA\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Materials\"\>"}], ",", 
+   RowBox[{"\<\"MOLES SEEDS\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Plants and Trees\"\>"}], ",", 
+   RowBox[{"\<\"ORGANICCATALO\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Plants and Trees\"\>"}], ",", 
+   RowBox[{"\<\"TAMAR ORGANIC\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Plants and Trees\"\>"}], ",", 
+   RowBox[{"\<\"THE REAL SEED\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Plants and Trees\"\>"}], ",", 
+   RowBox[{"\<\"WOODLAND TRUST\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Plants and Trees\"\>"}], ",", 
+   RowBox[{"\<\"WWW.SOWSEEDS\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Plants and Trees\"\>"}], ",", 
+   RowBox[{"\<\"WWW.SUTTONS-S\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Plants and Trees\"\>"}], ",", 
+   RowBox[{"\<\"CORNWALL FARM\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Production\"\>"}], ",", 
+   RowBox[{"\<\"WEB HOSTING\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Software\"\>"}], ",", 
+   RowBox[{"\<\"WWW.ANDIC\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Software\"\>"}], ",", 
+   RowBox[{"\<\"WWW.ANDICA\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Software\"\>"}], ",", 
+   RowBox[{"\<\"WWW.TAXSH\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Software\"\>"}], ",", 
+   RowBox[{"\<\"WWW.TAXSHIELD\"\>", 
+    "\[Rule]", "\<\"Expenses in VAT:Software\"\>"}], ",", 
+   RowBox[{"\<\"Bank Credit Interest\"\>", 
+    "\[Rule]", "\<\"Income:Interest\"\>"}], ",", 
+   RowBox[{"\<\"ANNUAL BONUS\"\>", "\[Rule]", "\<\"Income:Other Income\"\>"}],
+    ",", 
+   RowBox[{"\<\"National Giro Credit\"\>", 
+    "\[Rule]", "\<\"Income:Other Income\"\>"}], ",", 
+   RowBox[{"\<\"DETOX RETREATS LTD\"\>", 
+    "\[Rule]", "\<\"Income:Sales:Food:Fruit and veg\"\>"}], ",", 
+   RowBox[{"\<\"Faster Payment BEHRENS F & C\"\>", 
+    "\[Rule]", "\<\"Income:Sales:Food:Fruit and veg\"\>"}], ",", 
+   RowBox[{"\<\"Faster Payment B Kellett\"\>", 
+    "\[Rule]", "\<\"Income:Sales:Food:Fruit and veg\"\>"}], ",", 
+   RowBox[{"\<\"Faster Payment THRIVE CAFE RETAIL\"\>", 
+    "\[Rule]", "\<\"Income:Sales:Food:Fruit and veg\"\>"}], ",", 
+   RowBox[{"\<\"National Giro Credit\"\>", 
+    "\[Rule]", "\<\"Income:Sales:Food:Fruit and veg\"\>"}], ",", 
+   RowBox[{"\<\"HMRC VAT REPAY\"\>", "\[Rule]", "\<\"VAT:Input\"\>"}]}], 
+  "}"}]], "Output"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
@@ -10835,7 +11126,8 @@ Cell[BoxData[{
   RowBox[{"Dynamic", "[", "numberedData", "]"}], "//", 
   "autoNumber"}], "\[IndentingNewLine]", 
  RowBox[{"Dynamic", "[", 
-  RowBox[{"numberedData", "//", "Dataset"}], "]"}]}], "Input"],
+  RowBox[{"numberedData", "//", "Dataset"}], "]"}]}], "Input",
+ InitializationCell->True],
 
 Cell[BoxData[
  DynamicBox[ToBoxes[
@@ -10851,15 +11143,17 @@ Cell["Searching and summarising", "Subsubsection"],
 Cell[CellGroupData[{
 
 Cell[BoxData[
- RowBox[{"Dataset", "[", 
-  RowBox[{
+ RowBox[{"dataShort", "=", 
+  RowBox[{"Dataset", "[", 
    RowBox[{
-    RowBox[{"AssociationThread", "[", 
-     RowBox[{
-      RowBox[{"{", 
-       RowBox[{"\"\<date\>\"", ",", "\"\<desc\>\"", ",", "\"\<value\>\""}], 
-       "}"}], "\[Rule]", "#"}], "]"}], "&"}], "/@", "ccDataShort"}], 
-  "]"}]], "Input"],
+    RowBox[{
+     RowBox[{"AssociationThread", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\"\<date\>\"", ",", "\"\<desc\>\"", ",", "\"\<value\>\""}], 
+        "}"}], "\[Rule]", "#"}], "]"}], "&"}], "/@", "ccDataShort"}], 
+   "]"}]}]], "Input",
+ InitializationCell->True],
 
 Cell[BoxData[
  InterpretationBox[
@@ -11224,12 +11518,12 @@ Cell[BoxData[
       TypeSystem`Atom[String], 
       TypeSystem`Atom[String], 
       TypeSystem`Atom[Real]}], 20], 
-   Association["ID" -> 7176948072654]]]], "Output"]
+   Association["ID" -> 191778937587425]]]], "Output"]
 }, Open  ]],
 
 Cell["\<\
 We can now use very general queries to extract information from the dataset \
-and store it:\
+and store values calculated from the search result:\
 \>", "Text"],
 
 Cell[CellGroupData[{
@@ -11241,16 +11535,7 @@ Cell[BoxData[{
    RowBox[{"{", 
     RowBox[{"\"\<ROYAL SEVEN\>\"", ",", "\"\<KOFFIEBOONTJE\>\""}], "}"}]}], 
   ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"Dataset", "[", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"AssociationThread", "[", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{"\"\<date\>\"", ",", "\"\<desc\>\"", ",", "\"\<value\>\""}], 
-        "}"}], "\[Rule]", "#"}], "]"}], "&"}], "/@", "ccDataShort"}], "]"}], 
-  "[", 
+ RowBox[{"dataShort", "[", 
   RowBox[{"Select", "[", 
    RowBox[{
     RowBox[{"StringMatchQ", "[", 
@@ -11437,8 +11722,8 @@ Cell[BoxData[
           BlankNullSequence[], 
           $CellContext`tags["food"], 
           BlankNullSequence[]]]& ]][
-       Dataset`DatasetHandle[139912912355538]]], "ID" -> 
-    215534401536210]]]], "Output",
+       Dataset`DatasetHandle[191778937587425]]], "ID" -> 
+    182372959209204]]]], "Output",
  InitializationGroup->True],
 
 Cell[BoxData["178.9`"], "Output",
@@ -11453,8 +11738,8 @@ Cell[BoxData["2"], "Output",
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{1447, 1091},
-WindowMargins->{{4, Automatic}, {Automatic, 4}},
+WindowSize->{1694, 1151},
+WindowMargins->{{4, Automatic}, {1, Automatic}},
 ShowCellTags->True,
 Magnification:>1.5 Inherited,
 FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 4, \
@@ -11481,8 +11766,8 @@ CellTagsIndex->{
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"todo", 536911, 11468},
- {"palette", 537127, 11475}
+ {"todo", 550285, 11753},
+ {"palette", 550501, 11760}
  }
 *)
 (*NotebookFileOutline
@@ -11542,9 +11827,9 @@ Cell[CellGroupData[{
 Cell[11611, 416, 293, 8, 43, "Input"],
 Cell[11907, 426, 192, 5, 43, "Output"]
 }, Open  ]]
-}, Open  ]],
+}, Closed]],
 Cell[CellGroupData[{
-Cell[12148, 437, 137, 1, 52, "Subsubsection"],
+Cell[12148, 437, 137, 1, 41, "Subsubsection"],
 Cell[12288, 440, 2656, 71, 244, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
@@ -11589,176 +11874,192 @@ Cell[CellGroupData[{
 Cell[24623, 830, 57, 0, 41, "Subsubsection"],
 Cell[24683, 832, 1693, 50, 154, "Input",
  Evaluatable->False,
- CellTags->"palette"],
-Cell[26379, 884, 110, 3, 46, "Text"],
-Cell[26492, 889, 401, 12, 94, "Input"],
-Cell[CellGroupData[{
-Cell[26918, 905, 82, 1, 43, "Input"],
-Cell[27003, 908, 1218, 27, 241, "Output"]
-}, Closed]]
-}, Open  ]]
+ CellTags->"palette"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[28282, 942, 40, 0, 65, "Subsection"],
+Cell[26413, 887, 64, 0, 52, "Subsubsection"],
+Cell[26480, 889, 110, 3, 46, "Text"],
+Cell[26593, 894, 401, 12, 94, "Input"],
 Cell[CellGroupData[{
-Cell[28347, 946, 70, 0, 52, "Subsubsection"],
-Cell[28420, 948, 650, 14, 77, "Text"],
-Cell[29073, 964, 696, 22, 43, "Input",
- InitializationGroup->True],
-Cell[29772, 988, 665, 18, 47, "Text"],
-Cell[CellGroupData[{
-Cell[30462, 1010, 249, 8, 44, "Input",
- InitializationCell->True],
-Cell[30714, 1020, 445, 10, 70, "Output"]
-}, Open  ]],
-Cell[31174, 1033, 320, 7, 47, "Text"],
-Cell[CellGroupData[{
-Cell[31519, 1044, 1165, 31, 94, "Input",
- InitializationGroup->True],
-Cell[32687, 1077, 232, 6, 70, "Output"]
-}, Open  ]],
-Cell[32934, 1086, 448, 16, 47, "Text"],
-Cell[CellGroupData[{
-Cell[33407, 1106, 846, 22, 69, "Input",
- InitializationGroup->True],
-Cell[34256, 1130, 485, 14, 70, "Output"]
-}, Open  ]],
-Cell[34756, 1147, 451, 15, 47, "Text"],
-Cell[CellGroupData[{
-Cell[35232, 1166, 868, 22, 69, "Input",
- InitializationGroup->True],
-Cell[36103, 1190, 421, 12, 70, "Output"]
-}, Open  ]],
-Cell[36539, 1205, 266, 7, 47, "Text"],
-Cell[CellGroupData[{
-Cell[36830, 1216, 730, 21, 69, "Input",
- InitializationGroup->True],
-Cell[37563, 1239, 958, 22, 70, "Output"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[38558, 1266, 345, 8, 69, "Input"],
-Cell[38906, 1276, 31, 0, 43, "Output"],
-Cell[38940, 1278, 31, 0, 43, "Output"]
-}, Open  ]],
-Cell[38986, 1281, 327, 10, 46, "Text"],
-Cell[CellGroupData[{
-Cell[39338, 1295, 1158, 31, 101, "Input",
- InitializationCell->True],
-Cell[40499, 1328, 302, 7, 70, "Output"],
-Cell[40804, 1337, 1931, 39, 70, "Output"]
-}, Open  ]]
-}, Closed]],
-Cell[CellGroupData[{
-Cell[42784, 1382, 183, 2, 41, "Subsubsection"],
-Cell[CellGroupData[{
-Cell[42992, 1388, 1026, 31, 94, "Input",
- InitializationCell->True],
-Cell[44021, 1421, 1571, 52, 70, "Output"]
-}, Open  ]]
-}, Closed]],
-Cell[CellGroupData[{
-Cell[45641, 1479, 192, 2, 41, "Subsubsection"],
-Cell[45836, 1483, 452, 11, 105, "Text"],
-Cell[CellGroupData[{
-Cell[46313, 1498, 1797, 48, 144, "Input"],
-Cell[48113, 1548, 1004, 23, 43, "Output"],
-Cell[49120, 1573, 1002, 23, 43, "Output"],
-Cell[50125, 1598, 122, 2, 43, "Output"]
-}, Open  ]]
-}, Closed]],
-Cell[CellGroupData[{
-Cell[50296, 1606, 62, 0, 41, "Subsubsection"],
-Cell[CellGroupData[{
-Cell[50383, 1610, 381, 8, 44, "Input"],
-Cell[50767, 1620, 174, 4, 43, "Output"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[50978, 1629, 341, 7, 44, "Input"],
-Cell[51322, 1638, 157, 3, 43, "Output"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[51516, 1646, 467, 13, 44, "Input"],
-Cell[51986, 1661, 120, 3, 43, "Output"]
-}, Open  ]]
+Cell[27019, 910, 82, 1, 43, "Input"],
+Cell[27104, 913, 1218, 27, 241, "Output"]
 }, Closed]]
 }, Closed]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[52179, 1672, 40, 0, 95, "Section"],
+Cell[28383, 947, 40, 0, 65, "Subsection"],
 Cell[CellGroupData[{
-Cell[52244, 1676, 36, 0, 65, "Subsection"],
-Cell[52283, 1678, 1517, 21, 341, "Text"],
-Cell[53803, 1701, 686, 13, 164, "Text"],
-Cell[54492, 1716, 187, 4, 76, "Text"],
-Cell[54682, 1722, 220, 4, 76, "Text"],
-Cell[54905, 1728, 922, 14, 223, "Text"]
+Cell[28448, 951, 70, 0, 52, "Subsubsection"],
+Cell[28521, 953, 650, 14, 77, "Text"],
+Cell[29174, 969, 696, 22, 43, "Input",
+ InitializationGroup->True],
+Cell[29873, 993, 665, 18, 47, "Text"],
+Cell[CellGroupData[{
+Cell[30563, 1015, 249, 8, 44, "Input",
+ InitializationCell->True],
+Cell[30815, 1025, 445, 10, 70, "Output"]
+}, Open  ]],
+Cell[31275, 1038, 320, 7, 47, "Text"],
+Cell[CellGroupData[{
+Cell[31620, 1049, 1165, 31, 94, "Input",
+ InitializationGroup->True],
+Cell[32788, 1082, 232, 6, 70, "Output"]
+}, Open  ]],
+Cell[33035, 1091, 448, 16, 47, "Text"],
+Cell[CellGroupData[{
+Cell[33508, 1111, 846, 22, 69, "Input",
+ InitializationGroup->True],
+Cell[34357, 1135, 485, 14, 70, "Output"]
+}, Open  ]],
+Cell[34857, 1152, 451, 15, 47, "Text"],
+Cell[CellGroupData[{
+Cell[35333, 1171, 868, 22, 69, "Input",
+ InitializationGroup->True],
+Cell[36204, 1195, 421, 12, 70, "Output"]
+}, Open  ]],
+Cell[36640, 1210, 266, 7, 47, "Text"],
+Cell[CellGroupData[{
+Cell[36931, 1221, 730, 21, 69, "Input",
+ InitializationGroup->True],
+Cell[37664, 1244, 958, 22, 70, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[38659, 1271, 345, 8, 69, "Input"],
+Cell[39007, 1281, 31, 0, 43, "Output"],
+Cell[39041, 1283, 31, 0, 43, "Output"]
+}, Open  ]],
+Cell[39087, 1286, 327, 10, 46, "Text"],
+Cell[CellGroupData[{
+Cell[39439, 1300, 1158, 31, 101, "Input",
+ InitializationCell->True],
+Cell[40600, 1333, 302, 7, 70, "Output"],
+Cell[40905, 1342, 1931, 39, 70, "Output"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[42885, 1387, 183, 2, 41, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[43093, 1393, 1026, 31, 94, "Input",
+ InitializationCell->True],
+Cell[44122, 1426, 1571, 52, 70, "Output"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[45742, 1484, 192, 2, 41, "Subsubsection"],
+Cell[45937, 1488, 452, 11, 105, "Text"],
+Cell[CellGroupData[{
+Cell[46414, 1503, 1797, 48, 144, "Input"],
+Cell[48214, 1553, 1004, 23, 43, "Output"],
+Cell[49221, 1578, 1002, 23, 43, "Output"],
+Cell[50226, 1603, 122, 2, 43, "Output"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[50397, 1611, 62, 0, 41, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[50484, 1615, 381, 8, 44, "Input"],
+Cell[50868, 1625, 174, 4, 43, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[51079, 1634, 341, 7, 44, "Input"],
+Cell[51423, 1643, 157, 3, 43, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[51617, 1651, 467, 13, 44, "Input"],
+Cell[52087, 1666, 120, 3, 43, "Output"]
+}, Open  ]]
+}, Closed]]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[52280, 1677, 68, 0, 95, "Section"],
+Cell[CellGroupData[{
+Cell[52373, 1681, 36, 0, 65, "Subsection"],
+Cell[52412, 1683, 1517, 21, 282, "Text"],
+Cell[53932, 1706, 686, 13, 135, "Text"],
+Cell[54621, 1721, 186, 4, 46, "Text"],
+Cell[54810, 1727, 220, 4, 46, "Text"],
+Cell[55033, 1733, 922, 14, 194, "Text"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[55876, 1748, 51, 0, 95, "Section"],
+Cell[56004, 1753, 51, 0, 95, "Section"],
 Cell[CellGroupData[{
-Cell[55952, 1752, 57, 0, 65, "Subsection"],
-Cell[56012, 1754, 448, 8, 105, "Text"],
-Cell[56463, 1764, 7958, 184, 844, "Input",
- InitializationCell->True],
-Cell[64424, 1950, 330, 8, 69, "Input",
- InitializationCell->True],
-Cell[64757, 1960, 328, 8, 69, "Input",
+Cell[56080, 1757, 57, 0, 65, "Subsection"],
+Cell[56140, 1759, 448, 8, 105, "Text"],
+Cell[56591, 1769, 7958, 184, 794, "Input",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[65110, 1972, 70, 0, 52, "Subsubsection"],
-Cell[65183, 1974, 13516, 262, 519, "Input",
+Cell[64574, 1957, 70, 0, 52, "Subsubsection"],
+Cell[64647, 1959, 431, 9, 76, "Text"],
+Cell[65081, 1970, 3361, 72, 394, "Input",
+ InitializationCell->True],
+Cell[68445, 2044, 325, 8, 94, "Input",
+ InitializationCell->True],
+Cell[68773, 2054, 666, 18, 44, "Input",
+ InitializationGroup->True],
+Cell[69442, 2074, 13516, 262, 444, "Input",
  InitializationCell->True]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[78736, 2241, 43, 0, 52, "Subsubsection"],
+Cell[82995, 2341, 43, 0, 52, "Subsubsection"],
 Cell[CellGroupData[{
-Cell[78804, 2245, 222, 5, 43, "Input"],
-Cell[79029, 2252, 380614, 7108, 446, "Output"]
+Cell[83063, 2345, 222, 5, 43, "Input"],
+Cell[83288, 2352, 383541, 7155, 446, "Output"],
+Cell[466832, 9509, 506, 9, 54, "Print"]
+}, Open  ]],
+Cell[467353, 9521, 352, 6, 76, "Text"],
+Cell[467708, 9529, 666, 18, 44, "Input",
+ InitializationGroup->True],
+Cell[CellGroupData[{
+Cell[468399, 9551, 106, 2, 43, "Input"],
+Cell[468508, 9555, 4650, 96, 527, "Output"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[459704, 9367, 68, 0, 65, "Subsection"],
-Cell[459775, 9369, 705, 19, 94, "Input",
+Cell[473219, 9658, 68, 0, 65, "Subsection"],
+Cell[473290, 9660, 705, 19, 94, "Input",
  InitializationGroup->True],
-Cell[460483, 9390, 39, 0, 46, "Text"],
-Cell[460525, 9392, 3047, 86, 344, "Input",
+Cell[473998, 9681, 39, 0, 46, "Text"],
+Cell[474040, 9683, 3047, 86, 269, "Input",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[463597, 9482, 147, 4, 43, "Input"],
-Cell[463747, 9488, 138, 3, 43, "Output"]
+Cell[477112, 9773, 147, 4, 43, "Input"],
+Cell[477262, 9779, 138, 3, 43, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[463922, 9496, 49, 0, 52, "Subsubsection"],
+Cell[477437, 9787, 49, 0, 52, "Subsubsection"],
 Cell[CellGroupData[{
-Cell[463996, 9500, 2223, 58, 244, "Input",
+Cell[477511, 9791, 2223, 58, 219, "Input",
  InitializationGroup->True],
-Cell[466222, 9560, 49209, 1250, 862, "Output"]
+Cell[479737, 9851, 49209, 1250, 862, "Output"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[515480, 10816, 38, 0, 52, "Subsubsection"],
+Cell[528995, 11107, 38, 0, 52, "Subsubsection"],
 Cell[CellGroupData[{
-Cell[515543, 10820, 624, 17, 119, "Input"],
-Cell[516170, 10839, 140, 3, 702, "Output"]
+Cell[529058, 11111, 651, 18, 119, "Input",
+ InitializationCell->True],
+Cell[529712, 11131, 140, 3, 702, "Output"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[516359, 10848, 50, 0, 52, "Subsubsection"],
+Cell[529901, 11140, 50, 0, 52, "Subsubsection"],
 Cell[CellGroupData[{
-Cell[516434, 10852, 301, 9, 43, "Input"],
-Cell[516738, 10863, 12397, 363, 702, "Output"]
+Cell[529976, 11144, 367, 11, 43, "Input",
+ InitializationCell->True],
+Cell[530346, 11157, 12399, 363, 702, "Output"]
 }, Open  ]],
-Cell[529150, 11229, 115, 3, 46, "Text"],
+Cell[542760, 11523, 153, 3, 46, "Text"],
 Cell[CellGroupData[{
-Cell[529290, 11236, 1067, 31, 144, "Input",
+Cell[542938, 11530, 793, 22, 119, "Input",
  InitializationGroup->True],
-Cell[530360, 11269, 5999, 172, 169, "Output",
+Cell[543734, 11554, 5999, 172, 169, "Output",
  InitializationGroup->True],
-Cell[536362, 11443, 61, 1, 43, "Output",
+Cell[549736, 11728, 61, 1, 43, "Output",
  InitializationGroup->True],
-Cell[536426, 11446, 56, 1, 43, "Output",
+Cell[549800, 11731, 56, 1, 43, "Output",
  InitializationGroup->True]
 }, Open  ]]
 }, Open  ]]

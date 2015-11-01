@@ -126,11 +126,17 @@ rt@"Junk"
 
 
 Clear[globMap]
+globMap["business"]=
+{"Assets:Cash in Hand"->{"ATM Debit"},"Equity:Partners Loan"->{"TFR xxxx","TFR xxxx"},"Expenses in VAT:Dues and Subscriptions"->{"COMPANIES HSE","FWAG"},"Expenses in VAT:Equipment"->{"ENDSLEIGH GAR","HARRIS & SON","MACHINE MART","MAPLIN EXETER","MOLE AVON","MP HARDWARE"},"Expenses in VAT:Fuel"->{"TEXSHINNERSBR","W M MORRISON"},"Expenses in VAT:Materials"->{"B & Q","CORNWALL FARM","CREATIVE CRAF","FERMOYS","FIRST TUNNELS","INTER-LINE","PIPE STOCK","RAINWATERPROD","SOUTHERN TIMB","TRAGO NEWTON","UNITED ROOFIN","WP-ALLPLAS","WWW.KIOWA"},"Expenses in VAT:Plants and Trees"->{"MOLES SEEDS","ORGANICCATALO","TAMAR ORGANIC","THE REAL SEED","WOODLAND TRUST","WWW.SOWSEEDS","WWW.SUTTONS-S"},"Expenses in VAT:Production"->{"CORNWALL FARM"},"Expenses in VAT:Software"->{"WEB HOSTING","WWW.ANDIC","WWW.ANDICA","WWW.TAXSH","WWW.TAXSHIELD"},"Income:Interest"->{"Bank Credit Interest"},"Income:Other Income"->{"ANNUAL BONUS","National Giro Credit"},"Income:Sales:Food:Fruit and veg"->{"DETOX RETREATS LTD","Faster Payment BEHRENS F & C","Faster Payment B Kellett","Faster Payment THRIVE CAFE RETAIL","National Giro Credit"},"VAT:Input"->{"HMRC VAT REPAY"}};
 globMap[_]={};
 
 
+Clear[flat1]
 flat1[ls_List]:=Flatten[ls,1]
 flat1[ob_]:=ob
+
+
+expandMap[map_]:=Block[{x,y,z},\[LeftBracketingBar]z->x,(x_->y_)\[LeftTriangle]map,z_\[LeftTriangle]y\[RightBracketingBar]]
 
 
 Clear[treeToTabs,forestToTabs]
@@ -148,6 +154,9 @@ With[{s=treeToTabs[#,map,tag,name<>h]&/@t},{h->TabView[flat1[s],ControlPlacement
 forestToTabs[trs_List,map_,tag_]:=TabView[flat1[treeToTabs[#,map,tag]&/@trs],ControlPlacement->{Center,Top},LabelStyle->Small,Appearance->{"Limited",10}]
 
 
+expandMap[map_]:=Block[{x,y,z},\[LeftBracketingBar]z->x,(x_->y_)\[LeftTriangle]map,z_\[LeftTriangle]y\[RightBracketingBar]]
+
+
 ClearAll[autoNumber]
 autoNumber[Dynamic[data_],fieldName_String:"number",offset_Integer:0]:=
 Do[(data[[i,fieldName]]=offset+i),{i,1,Length[data]}]
@@ -163,8 +172,17 @@ SetAttributes[makeRow,HoldAll]
 AssociationThread[{"date","description","value"}->#]&/@Map[makeRow[ccDataShort,#]&,Range[20]]//Dataset
 
 
+Clear[numberedData]
+numberedData=AssociationThread[{"date","description","value"}->#]&/@ccDataShort;
+Dynamic[numberedData]//autoNumber
+Dynamic[numberedData//Dataset]
+
+
+dataShort=Dataset[AssociationThread[{"date","desc","value"}->#]&/@ccDataShort]
+
+
 tags["food"]={"ROYAL SEVEN","KOFFIEBOONTJE"};
-Dataset[AssociationThread[{"date","desc","value"}->#]&/@ccDataShort][Select[StringMatchQ[#desc,___~~tags["food"]~~___]&]]
+dataShort[Select[StringMatchQ[#desc,___~~tags["food"]~~___]&]]
 total["food"]=%[Total,"value"]
 len["food"]=%%//Length
 
