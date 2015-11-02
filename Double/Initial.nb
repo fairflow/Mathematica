@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    561254,      12140]
-NotebookOptionsPosition[    551378,      11808]
-NotebookOutlinePosition[    552277,      11845]
-CellTagsIndexPosition[    552151,      11838]
+NotebookDataLength[    565371,      12281]
+NotebookOptionsPosition[    554787,      11927]
+NotebookOutlinePosition[    555850,      11968]
+CellTagsIndexPosition[    555724,      11961]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -2407,7 +2407,7 @@ Cell[BoxData[
 
 Cell[BoxData[
  TagBox[
-  DynamicModuleBox[{Typeset`var$$ = 6}, 
+  DynamicModuleBox[{Typeset`var$$ = 4}, 
    InterpretationBox[
     DynamicModuleBox[{DynamicDump`width$$ = 10, DynamicDump`jump$$ = 10, 
      DynamicDump`tabdata$$ = {{
@@ -6847,7 +6847,7 @@ $CellContext`globMap["business"] =
             GridBoxItemSize -> {
              "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], "Grid"]], 
          DynamicModuleValues :> {}]}}, DynamicDump`start$$ = 1, 
-     DynamicDump`maxstart$$ = 3, DynamicDump`index$$ = 6}, 
+     DynamicDump`maxstart$$ = 3, DynamicDump`index$$ = 4}, 
      DynamicBox[TabViewBox[{{Typeset`first, (StyleBox[#, 
            CurrentValue[{"ControlsFontSize", Large}], FontColor -> 
            If[#2 === #3, Gray, Black]]& )[
@@ -11167,7 +11167,126 @@ Cell[BoxData[
    TypeSystem`Vector[
     TypeSystem`Struct[{"date", "description", "value"}, {
      TypeSystem`AnyType, TypeSystem`AnyType, TypeSystem`AnyType}], 20], 
-   Association["ID" -> 95670454407074]]]], "Output"]
+   Association["ID" -> 26220833274800]]]], "Output",
+ CellTags->{"tofix", "todo"}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Tests to resolve formatting issue", "Subsubsection"],
+
+Cell["\<\
+Yet more issues arise with large numbers.  The following produces an \
+un-editable number in the input field (though it is possible to delete the \
+number and replace it with another):\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Column", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"InputField", "[", 
+      RowBox[{"\"\<name\>\"", ",", "String"}], "]"}], ",", 
+     RowBox[{"InputField", "[", 
+      RowBox[{
+       RowBox[{"-", "30000001.12"}], ",", "Number"}], "]"}]}], "}"}], ",", 
+   RowBox[{"BaseStyle", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"SignPadding", "\[Rule]", "True"}], ",", 
+      RowBox[{"Alignment", "\[Rule]", "Center"}], ",", 
+      RowBox[{"NumberPadding", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"\"\<\\t\>\"", ",", "\"\< \>\""}], "}"}]}], ",", 
+      RowBox[{"NumberPoint", "\[Rule]", "\"\<,\>\""}], ",", 
+      RowBox[{"NumberSeparator", "\[Rule]", "\"\< \>\""}]}], "}"}]}]}], 
+  "]"}]], "Input"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TagBox[
+      DynamicModuleBox[{Typeset`i$$ = "name"}, 
+       InputFieldBox[Dynamic[Typeset`i$$], String],
+       DynamicModuleValues:>{}],
+      InputField[
+       Setting[#], String]& ]},
+    {
+     TagBox[
+      DynamicModuleBox[{Typeset`i$$ = -3.000000112*^7}, 
+       InputFieldBox[Dynamic[Typeset`i$$], Number],
+       DynamicModuleValues:>{}],
+      InputField[
+       Setting[#], Number]& ]}
+   },
+   BaseStyle->{
+    SignPadding -> True, Alignment -> Center, NumberPadding -> {"\t", " "}, 
+     NumberPoint -> ",", NumberSeparator -> " "},
+   DefaultBaseStyle->"Column",
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Column"]], "Output"]
+}, Open  ]],
+
+Cell["The same issue arises here:", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Column", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"InputField", "[", 
+      RowBox[{"\"\<name\>\"", ",", "String"}], "]"}], ",", 
+     RowBox[{"InputField", "[", 
+      RowBox[{
+       RowBox[{"-", "30001.12"}], ",", "Number"}], "]"}]}], "}"}], ",", 
+   RowBox[{"BaseStyle", "\[Rule]", 
+    RowBox[{"{", "\"\<ControlStyle\>\"", "}"}]}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TagBox[
+      DynamicModuleBox[{Typeset`i$$ = "name"}, 
+       InputFieldBox[Dynamic[Typeset`i$$], String],
+       DynamicModuleValues:>{}],
+      InputField[
+       Setting[#], String]& ]},
+    {
+     TagBox[
+      DynamicModuleBox[{Typeset`i$$ = -3.000000112*^7}, 
+       InputFieldBox[Dynamic[Typeset`i$$], Number],
+       DynamicModuleValues:>{}],
+      InputField[
+       Setting[#], Number]& ]}
+   },
+   BaseStyle->{"ControlStyle"},
+   DefaultBaseStyle->"Column",
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Column"]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"InputField", "[", 
+  RowBox[{
+   RowBox[{"-", "30000001.12"}], ",", "Number"}], "]"}]], "Input"],
+
+Cell[BoxData[
+ TagBox[
+  DynamicModuleBox[{Typeset`i$$ = -3.000000112*^7}, 
+   InputFieldBox[Dynamic[Typeset`i$$], Number],
+   DynamicModuleValues:>{}],
+  InputField[
+   Setting[#], Number]& ]], "Output"]
 }, Open  ]]
 }, Open  ]],
 
@@ -11586,7 +11705,7 @@ Cell[BoxData[
       TypeSystem`Atom[String], 
       TypeSystem`Atom[String], 
       TypeSystem`Atom[Real]}], 20], 
-   Association["ID" -> 191778937587425]]]], "Output"]
+   Association["ID" -> 108705680194480]]]], "Output"]
 }, Open  ]],
 
 Cell["\<\
@@ -11790,8 +11909,8 @@ Cell[BoxData[
           BlankNullSequence[], 
           $CellContext`tags["food"], 
           BlankNullSequence[]]]& ]][
-       Dataset`DatasetHandle[191778937587425]]], "ID" -> 
-    182372959209204]]]], "Output",
+       Dataset`DatasetHandle[108705680194480]]], "ID" -> 
+    81960918842288]]]], "Output",
  InitializationGroup->True],
 
 Cell[BoxData["178.9`"], "Output",
@@ -11819,27 +11938,31 @@ StyleDefinitions->"Default.nb"
 (* Internal cache information *)
 (*CellTagsOutline
 CellTagsIndex->{
- "palette"->{
-  Cell[25738, 886, 1693, 50, 154, "Input",
-   Evaluatable->False,
-   CellTags->"palette"]},
  "todo"->{
   Cell[746, 30, 43, 1, 112, "Section",
    CellTags->"todo"],
   Cell[478927, 9858, 2253, 59, 236, "Input",
    InitializationGroup->True,
+   CellTags->{"tofix", "todo"}],
+  Cell[481183, 9919, 49239, 1251, 879, "Output",
    CellTags->{"tofix", "todo"}]},
+ "palette"->{
+  Cell[25738, 886, 1693, 50, 154, "Input",
+   Evaluatable->False,
+   CellTags->"palette"]},
  "tofix"->{
   Cell[478927, 9858, 2253, 59, 236, "Input",
    InitializationGroup->True,
+   CellTags->{"tofix", "todo"}],
+  Cell[481183, 9919, 49239, 1251, 879, "Output",
    CellTags->{"tofix", "todo"}]}
  }
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"palette", 551734, 11821},
- {"todo", 551837, 11825},
- {"tofix", 552019, 11831}
+ {"todo", 555140, 11940},
+ {"palette", 555406, 11948},
+ {"tofix", 555510, 11952}
  }
 *)
 (*NotebookFileOutline
@@ -11970,31 +12093,31 @@ Cell[30928, 1047, 665, 18, 105, "Text"],
 Cell[CellGroupData[{
 Cell[31618, 1069, 249, 8, 99, "Input",
  InitializationCell->True],
-Cell[31870, 1079, 445, 10, 157, "Output"]
+Cell[31870, 1079, 445, 10, 70, "Output"]
 }, Open  ]],
 Cell[32330, 1092, 320, 7, 105, "Text"],
 Cell[CellGroupData[{
 Cell[32675, 1103, 1165, 31, 211, "Input",
  InitializationGroup->True],
-Cell[33843, 1136, 232, 6, 157, "Output"]
+Cell[33843, 1136, 232, 6, 70, "Output"]
 }, Open  ]],
 Cell[34090, 1145, 448, 16, 105, "Text"],
 Cell[CellGroupData[{
 Cell[34563, 1165, 846, 22, 154, "Input",
  InitializationGroup->True],
-Cell[35412, 1189, 485, 14, 157, "Output"]
+Cell[35412, 1189, 485, 14, 70, "Output"]
 }, Open  ]],
 Cell[35912, 1206, 451, 15, 105, "Text"],
 Cell[CellGroupData[{
 Cell[36388, 1225, 868, 22, 154, "Input",
  InitializationGroup->True],
-Cell[37259, 1249, 421, 12, 157, "Output"]
+Cell[37259, 1249, 421, 12, 70, "Output"]
 }, Open  ]],
 Cell[37695, 1264, 266, 7, 105, "Text"],
 Cell[CellGroupData[{
 Cell[37986, 1275, 730, 21, 154, "Input",
  InitializationGroup->True],
-Cell[38719, 1298, 958, 22, 157, "Output"]
+Cell[38719, 1298, 958, 22, 70, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[39714, 1325, 345, 8, 154, "Input"],
@@ -12005,8 +12128,8 @@ Cell[40142, 1340, 327, 10, 103, "Text"],
 Cell[CellGroupData[{
 Cell[40494, 1354, 1158, 31, 226, "Input",
  InitializationCell->True],
-Cell[41655, 1387, 302, 7, 157, "Output"],
-Cell[41960, 1396, 1931, 39, 157, "Output"]
+Cell[41655, 1387, 302, 7, 70, "Output"],
+Cell[41960, 1396, 1931, 39, 70, "Output"]
 }, Open  ]]
 }, Closed]],
 Cell[CellGroupData[{
@@ -12014,7 +12137,7 @@ Cell[43940, 1441, 183, 2, 91, "Subsubsection"],
 Cell[CellGroupData[{
 Cell[44148, 1447, 1026, 31, 211, "Input",
  InitializationCell->True],
-Cell[45177, 1480, 1571, 52, 157, "Output"]
+Cell[45177, 1480, 1571, 52, 70, "Output"]
 }, Open  ]]
 }, Closed]],
 Cell[CellGroupData[{
@@ -12108,33 +12231,51 @@ Cell[CellGroupData[{
 Cell[478927, 9858, 2253, 59, 236, "Input",
  InitializationGroup->True,
  CellTags->{"tofix", "todo"}],
-Cell[481183, 9919, 49209, 1250, 862, "Output"]
+Cell[481183, 9919, 49239, 1251, 879, "Output",
+ CellTags->{"tofix", "todo"}]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[530441, 11175, 38, 0, 52, "Subsubsection"],
+Cell[530471, 11176, 58, 0, 52, "Subsubsection"],
+Cell[530532, 11178, 208, 4, 76, "Text"],
 Cell[CellGroupData[{
-Cell[530504, 11179, 651, 18, 119, "Input",
- InitializationCell->True],
-Cell[531158, 11199, 140, 3, 702, "Output"]
+Cell[530765, 11186, 759, 20, 69, "Input"],
+Cell[531527, 11208, 769, 23, 93, "Output"]
+}, Open  ]],
+Cell[532311, 11234, 43, 0, 46, "Text"],
+Cell[CellGroupData[{
+Cell[532379, 11238, 398, 11, 43, "Input"],
+Cell[532780, 11251, 658, 21, 101, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[533475, 11277, 120, 3, 43, "Input"],
+Cell[533598, 11282, 204, 6, 54, "Output"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[531347, 11208, 50, 0, 52, "Subsubsection"],
+Cell[533851, 11294, 38, 0, 52, "Subsubsection"],
 Cell[CellGroupData[{
-Cell[531422, 11212, 367, 11, 43, "Input",
+Cell[533914, 11298, 651, 18, 119, "Input",
  InitializationCell->True],
-Cell[531792, 11225, 12399, 363, 702, "Output"]
+Cell[534568, 11318, 140, 3, 702, "Output"]
+}, Open  ]]
 }, Open  ]],
-Cell[544206, 11591, 153, 3, 46, "Text"],
 Cell[CellGroupData[{
-Cell[544384, 11598, 793, 22, 119, "Input",
+Cell[534757, 11327, 50, 0, 52, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[534832, 11331, 367, 11, 43, "Input",
+ InitializationCell->True],
+Cell[535202, 11344, 12399, 363, 702, "Output"]
+}, Open  ]],
+Cell[547616, 11710, 153, 3, 46, "Text"],
+Cell[CellGroupData[{
+Cell[547794, 11717, 793, 22, 119, "Input",
  InitializationGroup->True],
-Cell[545180, 11622, 5999, 172, 169, "Output",
+Cell[548590, 11741, 5998, 172, 169, "Output",
  InitializationGroup->True],
-Cell[551182, 11796, 61, 1, 43, "Output",
+Cell[554591, 11915, 61, 1, 43, "Output",
  InitializationGroup->True],
-Cell[551246, 11799, 56, 1, 43, "Output",
+Cell[554655, 11918, 56, 1, 43, "Output",
  InitializationGroup->True]
 }, Open  ]]
 }, Open  ]]
